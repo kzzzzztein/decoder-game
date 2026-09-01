@@ -1,44 +1,43 @@
-/* DECODE — Game Engine */
+/* DECODE — Game Engine v2
+   Letter-box answers, live per-keystroke validation, and a real
+   cryptogram cross-reveal: solve one letter, every box sharing that
+   letter's cipher number lights up everywhere in the puzzle. */
 
 const STORAGE_KEY = "decode_progress_v1";
 
 let state = {
   category: null,
   puzzleIndex: 0,
-  blankRegistry: {},   // qIndex -> { letterEls: [HTMLElement], answer: "WORD" }
-  checkCount: 0,
+  slotsByLetter: {},     // "Y" -> [slot, slot, ...] across the whole puzzle
+  totalLetters: 0,       // total distinct letter positions to solve
+  solvedLetters: 0,
+  mistakes: 0,
   solvedThisRound: false
 };
 
 // ---------------- Progress persistence ----------------
 function loadProgress() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch (e) {
-    return {};
-  }
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch (e) { return {}; }
 }
-function saveProgress(progress) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
-  catch (e) { /* storage unavailable, fail silently */ }
+function saveProgress(p) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
 }
 function markSolved(category, puzzleId) {
-  const progress = loadProgress();
-  if (!progress[category]) progress[category] = [];
-  if (!progress[category].includes(puzzleId)) progress[category].push(puzzleId);
-  saveProgress(progress);
+  const p = loadProgress();
+  if (!p[category]) p[category] = [];
+  if (!p[category].includes(puzzleId)) p[category].push(puzzleId);
+  saveProgress(p);
 }
 function isSolved(category, puzzleId) {
-  const progress = loadProgress();
-  return !!(progress[category] && progress[category].includes(puzzleId));
+  const p = loadProgress();
+  return !!(p[category] && p[category].includes(puzzleId));
 }
 function totalSolvedCount() {
-  const progress = loadProgress();
-  return Object.values(progress).reduce((sum, arr) => sum + arr.length, 0);
+  return Object.values(loadProgress()).reduce((s, a) => s + a.length, 0);
 }
 function totalPuzzleCount() {
-  return Object.values(PUZZLE_DATA).reduce((sum, arr) => sum + arr.length, 0);
+  return Object.values(PUZZLE_DATA).reduce((s, a) => s + a.length, 0);
 }
 function updateScorePill() {
   document.getElementById("scorePill").textContent =
@@ -50,7 +49,6 @@ function showScreen(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
-
 document.querySelectorAll("[data-nav]").forEach(btn => {
   btn.addEventListener("click", () => {
     const target = btn.getAttribute("data-nav");
@@ -66,8 +64,7 @@ function renderHome() {
   Object.keys(PUZZLE_DATA).forEach(catKey => {
     const meta = CATEGORY_META[catKey];
     const puzzles = PUZZLE_DATA[catKey];
-    const progress = loadProgress();
-    const solvedCount = (progress[catKey] || []).length;
+    const solvedCount = (loadProgress()[catKey] || []).length;
     const pct = puzzles.length ? Math.round((solvedCount / puzzles.length) * 100) : 0;
 
     const tile = document.createElement("button");
@@ -101,24 +98,19 @@ function renderPicker(catKey) {
 
   const grid = document.getElementById("chipGrid");
   grid.innerHTML = "";
-
-  if (!puzzles.length) {
-    grid.innerHTML = `<div class="empty-note" style="grid-column:1/-1;">This category is empty. Add puzzle objects to PUZZLE_DATA.${catKey} in data.js to fill it up to 50.</div>`;
-  } else {
-    puzzles.forEach((p, i) => {
-      const chip = document.createElement("button");
-      const solved = isSolved(catKey, p.id);
-      chip.className = "chip" + (solved ? " solved" : "");
-      chip.textContent = i + 1;
-      chip.addEventListener("click", () => openPuzzle(catKey, i));
-      grid.appendChild(chip);
-    });
-  }
+  puzzles.forEach((p, i) => {
+    const chip = document.createElement("button");
+    const solved = isSolved(catKey, p.id);
+    chip.className = "chip" + (solved ? " solved" : "");
+    chip.textContent = i + 1;
+    chip.addEventListener("click", () => openPuzzle(catKey, i));
+    grid.appendChild(chip);
+  });
   updateScorePill();
   showScreen("screen-picker");
 }
 
-// ---------------- Game engine ----------------
+// ---------------- Tokenizing the quote ----------------
 function buildTokens(puzzle) {
   const words = puzzle.quote.split(" ");
   const pool = puzzle.questions.map((q, i) => ({
@@ -129,27 +121,49 @@ function buildTokens(puzzle) {
   return words.map(word => {
     const clean = word.replace(/[^A-Za-z']/g, "").toUpperCase();
     const match = pool.find(p => !p.used && p.text === clean);
-    if (match) {
-      match.used = true;
-      return { blank: true, word, qIndex: match.qIndex };
-    }
+    if (match) { match.used = true; return { blank: true, word, qIndex: match.qIndex }; }
     return { blank: false, word };
   });
 }
 
-function openPuzzle(catKey, index) {
-  state.category = catKey;
-  state.puzzleIndex = index;
-  state.checkCount = 0;
-  state.solvedThisRound = false;
-  state.blankRegistry = {};
+// ---------------- Slot registry helpers ----------------
+function registerSlot(letter, slot) {
+  if (!state.slotsByLetter[letter]) state.slotsByLetter[letter] = [];
+  state.slotsByLetter[letter].push(slot);
+  state.totalLetters++;
+}
 
-  const meta = CATEGORY_META[catKey];
-  const puzzle = PUZZLE_DATA[catKey][index];
-  document.getElementById("gameCatLabel").textContent = meta.label.toUpperCase();
-  document.getElementById("sourceReveal").classList.remove("show");
+function revealLetter(letter) {
+  const slots = state.slotsByLetter[letter];
+  if (!slots) return;
+  slots.forEach(slot => {
+    if (slot.solved) return;
+    slot.solved = true;
+    state.solvedLetters++;
+    if (slot.type === "quote") {
+      slot.el.textContent = letter;
+      slot.cellEl.classList.remove("filled", "wrong");
+      slot.cellEl.classList.add("correct");
+    } else {
+      slot.el.value = letter;
+      slot.el.classList.remove("wrong");
+      slot.el.classList.add("correct");
+      slot.el.disabled = true;
+    }
+  });
+  checkForWin();
+}
 
-  const tokens = buildTokens(puzzle);
+function checkForWin() {
+  if (state.solvedThisRound) return;
+  if (state.totalLetters > 0 && state.solvedLetters >= state.totalLetters) {
+    const puzzle = PUZZLE_DATA[state.category][state.puzzleIndex];
+    handleWin(puzzle);
+  }
+}
+
+// ---------------- Building the quote panel ----------------
+function renderQuotePanel(tokens, puzzle) {
   const quoteLine = document.getElementById("quoteLine");
   quoteLine.innerHTML = "";
 
@@ -163,21 +177,24 @@ function openPuzzle(catKey, index) {
     }
     const wrap = document.createElement("span");
     wrap.className = "blank-word";
-    const letterEls = [];
+    let pos = 0;
     for (const ch of token.word) {
       if (/[a-zA-Z]/.test(ch)) {
+        const upper = ch.toUpperCase();
         const cell = document.createElement("span");
         cell.className = "letter-cell";
-        const slot = document.createElement("span");
-        slot.className = "slot";
-        slot.textContent = "_";
+        const slotSpan = document.createElement("span");
+        slotSpan.className = "slot";
+        slotSpan.textContent = "_";
         const num = document.createElement("span");
         num.className = "cipher-num";
-        num.textContent = CIPHER_MAP[ch.toUpperCase()] || "";
-        cell.appendChild(slot);
+        num.textContent = CIPHER_MAP[upper] || "";
+        cell.appendChild(slotSpan);
         cell.appendChild(num);
         wrap.appendChild(cell);
-        letterEls.push(cell);
+
+        registerSlot(upper, { type: "quote", el: slotSpan, cellEl: cell, solved: false });
+        pos++;
       } else {
         const punct = document.createElement("span");
         punct.className = "word";
@@ -187,96 +204,129 @@ function openPuzzle(catKey, index) {
       }
     }
     quoteLine.appendChild(wrap);
-    state.blankRegistry[token.qIndex] = {
-      letterEls,
-      answer: puzzle.questions[token.qIndex].a
-    };
   });
+}
 
+// ---------------- Building question cards with letter boxes ----------------
+function renderQuestions(puzzle) {
   const qList = document.getElementById("questionsList");
   qList.innerHTML = "";
+
   puzzle.questions.forEach((q, i) => {
     const card = document.createElement("div");
     card.className = "question-card";
     card.id = `qcard-${i}`;
-    card.innerHTML = `
-      <span class="qnum">CLUE ${i + 1} / ${puzzle.questions.length}</span>
-      <p class="qtext">${q.q}</p>
-      <input type="text" id="qinput-${i}" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Type your answer...">
-    `;
+
+    const head = document.createElement("div");
+    head.innerHTML = `<span class="qnum">CLUE ${i + 1} / ${puzzle.questions.length}</span><p class="qtext">${q.q}</p>`;
+    card.appendChild(head);
+
+    const row = document.createElement("div");
+    row.className = "answer-row";
+
+    const boxes = []; // ordered letter-box input elements for this word
+
+    for (const ch of q.a) {
+      if (/[a-zA-Z]/.test(ch)) {
+        const upper = ch.toUpperCase();
+        const boxWrap = document.createElement("span");
+        boxWrap.className = "answer-box";
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.maxLength = 1;
+        input.autocomplete = "off";
+        input.autocapitalize = "characters";
+        input.spellcheck = false;
+        input.className = "answer-input";
+
+        const num = document.createElement("span");
+        num.className = "cipher-num";
+        num.textContent = CIPHER_MAP[upper] || "";
+
+        boxWrap.appendChild(input);
+        boxWrap.appendChild(num);
+        row.appendChild(boxWrap);
+
+        const slot = { type: "answer", el: input, solved: false };
+        registerSlot(upper, slot);
+        boxes.push({ input, target: upper, slot });
+      } else {
+        const punct = document.createElement("span");
+        punct.className = "answer-punct";
+        punct.textContent = ch;
+        row.appendChild(punct);
+      }
+    }
+
+    card.appendChild(row);
     qList.appendChild(card);
 
-    const input = card.querySelector("input");
-    input.addEventListener("input", () => liveFill(i, input.value));
-    input.addEventListener("keydown", e => {
-      if (e.key === "Enter") document.getElementById("checkBtn").click();
+    // wire up interactions for this word's boxes
+    boxes.forEach((box, idx) => {
+      box.input.addEventListener("focus", () => box.input.select());
+      box.input.addEventListener("input", () => {
+        const typed = box.input.value.toUpperCase().replace(/[^A-Z]/g, "");
+        box.input.value = typed;
+        if (!typed) return;
+
+        if (typed === box.target) {
+          revealLetter(box.target); // fills this + every matching box, sets card state
+          maybeMarkCardAnswered(card, boxes);
+        } else {
+          box.input.classList.remove("correct");
+          box.input.classList.add("wrong");
+          state.mistakes++;
+        }
+
+        // advance focus to next editable box
+        for (let j = idx + 1; j < boxes.length; j++) {
+          if (!boxes[j].slot.solved) { boxes[j].input.focus(); break; }
+        }
+      });
+      box.input.addEventListener("keydown", e => {
+        if (e.key === "Backspace" && !box.input.value) {
+          for (let j = idx - 1; j >= 0; j--) {
+            if (!boxes[j].slot.solved) { boxes[j].input.focus(); break; }
+          }
+        }
+      });
     });
   });
+}
+
+function maybeMarkCardAnswered(card, boxes) {
+  const allSolved = boxes.every(b => b.slot.solved);
+  card.classList.toggle("answered", allSolved);
+}
+
+// ---------------- Opening a puzzle ----------------
+function openPuzzle(catKey, index) {
+  state.category = catKey;
+  state.puzzleIndex = index;
+  state.slotsByLetter = {};
+  state.totalLetters = 0;
+  state.solvedLetters = 0;
+  state.mistakes = 0;
+  state.solvedThisRound = false;
+
+  const meta = CATEGORY_META[catKey];
+  const puzzle = PUZZLE_DATA[catKey][index];
+  document.getElementById("gameCatLabel").textContent = meta.label.toUpperCase();
+  document.getElementById("sourceReveal").classList.remove("show");
+
+  const tokens = buildTokens(puzzle);
+  renderQuotePanel(tokens, puzzle);
+  renderQuestions(puzzle);
 
   showScreen("screen-game");
 }
 
-function liveFill(qIndex, rawValue) {
-  const reg = state.blankRegistry[qIndex];
-  if (!reg) return;
-  const typedLetters = rawValue.toUpperCase().replace(/[^A-Z]/g, "").split("");
-  reg.letterEls.forEach((cell, i) => {
-    const slot = cell.querySelector(".slot");
-    const letter = typedLetters[i];
-    if (letter) {
-      const wasEmpty = slot.textContent === "_";
-      slot.textContent = letter;
-      cell.classList.remove("correct");
-      cell.classList.add("filled");
-      if (wasEmpty) {
-        cell.classList.remove("filled");
-        void cell.offsetWidth; // restart animation
-        cell.classList.add("filled");
-      }
-    } else {
-      slot.textContent = "_";
-      cell.classList.remove("filled", "correct");
-    }
-  });
-}
-
-function normalizeAnswer(str) {
-  return str.toUpperCase().replace(/[^A-Z]/g, "");
-}
-
-document.getElementById("checkBtn").addEventListener("click", () => {
-  const puzzle = PUZZLE_DATA[state.category][state.puzzleIndex];
-  state.checkCount++;
-  let allCorrect = true;
-
-  puzzle.questions.forEach((q, i) => {
-    const input = document.getElementById(`qinput-${i}`);
-    const card = document.getElementById(`qcard-${i}`);
-    const correct = normalizeAnswer(input.value) === normalizeAnswer(q.a);
-    card.classList.toggle("answered", correct);
-    if (correct) {
-      const reg = state.blankRegistry[i];
-      if (reg) reg.letterEls.forEach(cell => cell.classList.add("correct"));
-    } else {
-      allCorrect = false;
-    }
-  });
-
-  if (allCorrect) {
-    handleWin(puzzle);
-  }
-});
-
 document.getElementById("clearBtn").addEventListener("click", () => {
-  const puzzle = PUZZLE_DATA[state.category][state.puzzleIndex];
-  puzzle.questions.forEach((q, i) => {
-    const input = document.getElementById(`qinput-${i}`);
-    input.value = "";
-    liveFill(i, "");
-    document.getElementById(`qcard-${i}`).classList.remove("answered");
-  });
+  openPuzzle(state.category, state.puzzleIndex);
 });
 
+// ---------------- Win handling ----------------
 function handleWin(puzzle) {
   if (state.solvedThisRound) return;
   state.solvedThisRound = true;
@@ -286,18 +336,20 @@ function handleWin(puzzle) {
   document.getElementById("sourceReveal").classList.add("show");
   updateScorePill();
 
-  const stars = state.checkCount <= 1 ? 3 : state.checkCount === 2 ? 2 : 1;
+  const stars = state.mistakes === 0 ? 3 : state.mistakes <= 3 ? 2 : 1;
   document.getElementById("winStars").textContent = "★★★".slice(0, stars) + "☆☆☆".slice(0, 3 - stars);
   document.getElementById("winQuote").textContent = puzzle.quote;
   document.getElementById("winSource").textContent = "— " + puzzle.source;
-  document.getElementById("winOverlay").style.display = "flex";
+
+  setTimeout(() => {
+    document.getElementById("winOverlay").style.display = "flex";
+  }, 350);
 }
 
 document.getElementById("winPickerBtn").addEventListener("click", () => {
   document.getElementById("winOverlay").style.display = "none";
   renderPicker(state.category);
 });
-
 document.getElementById("winNextBtn").addEventListener("click", () => {
   document.getElementById("winOverlay").style.display = "none";
   const puzzles = PUZZLE_DATA[state.category];
@@ -311,6 +363,4 @@ document.getElementById("startGameBtn").addEventListener("click", () => {
   renderHome();
 });
 
-// Kick things off — dev note shows first via CSS default display,
-// home renders underneath so it's ready the instant the note closes.
 renderHome();
