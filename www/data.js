@@ -9,23 +9,21 @@
     questions: exactly 5 { q: "simple, casual clue", a: "ANSWER WORD" }
 
   Clue style: short and simple, like you'd explain it to a friend —
-  NOT a dictionary definition. e.g. for ANIMAL: "a type of living
-  thing" — not "a living organism that feeds on organic matter...".
+  NOT a dictionary definition.
 
   How the blanking works (see app.js):
   The engine scans the quote word by word. Any word that exactly matches
-  one of the 5 question answers (case-insensitive, punctuation ignored)
-  becomes a blank made of individual letter boxes. Every blank letter is
-  also tied to a shared cipher number (see CIPHER_MAP) — get one letter
-  right anywhere in the puzzle, and every box sharing that same letter,
-  in every word, reveals instantly.
+  one of the 5 answers becomes a row of letter boxes. Every letter also
+  shares a cipher number (see CIPHER_MAP) with every other instance of
+  that letter across the whole puzzle — solve one, they all reveal.
 
   TO ADD MORE LEVELS: append more objects to any array below, same shape.
-  Nothing else in the code needs to change.
+  Currently 18 per category — goal is 50 per category (250 total).
 
-  NOTE ON CONTENT: Music entries use short SPOKEN quotes from musicians
-  (interviews, famous sayings) rather than song lyrics, since lyrics are
-  copyrighted and shouldn't ship inside a distributed app.
+  NOTE ON CONTENT: Music entries mix short SPOKEN quotes from musicians
+  (interviews, sayings) with general music facts, rather than song
+  lyrics — lyrics are copyrighted and shouldn't ship inside a
+  distributed app.
 */
 
 const PUZZLE_DATA = {
@@ -124,6 +122,126 @@ const PUZZLE_DATA = {
         { q: "Not easy, tough.", a: "HARD" },
         { q: "The person someone is talking to.", a: "YOU" },
         { q: "To strike something.", a: "HIT" }
+      ]
+    },
+    {
+      id: "movies_09",
+      source: "Casablanca (1942)",
+      quote: "HERE'S LOOKING AT YOU KID",
+      questions: [
+        { q: "Short way to say 'here is'.", a: "HERE'S" },
+        { q: "Using your eyes to see.", a: "LOOKING" },
+        { q: "A small word showing location or aim.", a: "AT" },
+        { q: "The person someone is talking to.", a: "YOU" },
+        { q: "A young child, or a friendly nickname for someone.", a: "KID" }
+      ]
+    },
+    {
+      id: "movies_10",
+      source: "Dirty Harry (1971)",
+      quote: "GO AHEAD MAKE MY DAY",
+      questions: [
+        { q: "To move or leave.", a: "GO" },
+        { q: "Forward, in front.", a: "AHEAD" },
+        { q: "To create or cause something.", a: "MAKE" },
+        { q: "Belonging to me.", a: "MY" },
+        { q: "24 hours, from morning to night.", a: "DAY" }
+      ]
+    },
+    {
+      id: "movies_11",
+      source: "Field of Dreams (1989)",
+      quote: "IF YOU BUILD IT HE WILL COME",
+      questions: [
+        { q: "To construct or make something.", a: "BUILD" },
+        { q: "A word for a thing already mentioned.", a: "IT" },
+        { q: "A word for a boy or man.", a: "HE" },
+        { q: "A word for something that'll happen later.", a: "WILL" },
+        { q: "To arrive or move toward.", a: "COME" }
+      ]
+    },
+    {
+      id: "movies_12",
+      source: "Jurassic Park (1993)",
+      quote: "HOLD ON TO YOUR BUTTS",
+      questions: [
+        { q: "To grip something tightly.", a: "HOLD" },
+        { q: "Touching the top of, or turned active.", a: "ON" },
+        { q: "A small word showing direction.", a: "TO" },
+        { q: "Belonging to you.", a: "YOUR" },
+        { q: "A funny word for the part you sit on.", a: "BUTTS" }
+      ]
+    },
+    {
+      id: "movies_13",
+      source: "Back to the Future (1985)",
+      quote: "WHERE WE'RE GOING WE DON'T NEED ROADS",
+      questions: [
+        { q: "Asking about a place.", a: "WHERE" },
+        { q: "Short way to say 'we are'.", a: "WE'RE" },
+        { q: "Moving toward somewhere.", a: "GOING" },
+        { q: "Short way to say 'do not'.", a: "DON'T" },
+        { q: "Paths that cars drive on.", a: "ROADS" }
+      ]
+    },
+    {
+      id: "movies_14",
+      source: "The Matrix (1999)",
+      quote: "WELCOME TO THE REAL WORLD",
+      questions: [
+        { q: "A friendly greeting when someone arrives.", a: "WELCOME" },
+        { q: "A small word showing direction.", a: "TO" },
+        { q: "Actually true, not fake.", a: "REAL" },
+        { q: "The whole planet Earth.", a: "WORLD" },
+        { q: "A small word before a noun.", a: "THE" }
+      ]
+    },
+    {
+      id: "movies_15",
+      source: "Jerry Maguire (1996)",
+      quote: "YOU HAD ME AT HELLO",
+      questions: [
+        { q: "The person someone is talking to.", a: "YOU" },
+        { q: "The past form of 'have'.", a: "HAD" },
+        { q: "A word for the speaker.", a: "ME" },
+        { q: "A small word showing location.", a: "AT" },
+        { q: "A friendly word said when greeting someone.", a: "HELLO" }
+      ]
+    },
+    {
+      id: "movies_16",
+      source: "Gladiator (2000)",
+      quote: "WHAT WE DO IN LIFE ECHOES IN ETERNITY",
+      questions: [
+        { q: "A word used to ask about a thing.", a: "WHAT" },
+        { q: "Being alive.", a: "LIFE" },
+        { q: "Sounds that repeat and bounce back.", a: "ECHOES" },
+        { q: "Inside, not outside.", a: "IN" },
+        { q: "Forever, a time that never ends.", a: "ETERNITY" }
+      ]
+    },
+    {
+      id: "movies_17",
+      source: "Gone with the Wind (1939)",
+      quote: "AFTER ALL TOMORROW IS ANOTHER DAY",
+      questions: [
+        { q: "Later than something, following it.", a: "AFTER" },
+        { q: "Every single one.", a: "ALL" },
+        { q: "The day that comes after today.", a: "TOMORROW" },
+        { q: "One more, a different one.", a: "ANOTHER" },
+        { q: "24 hours, from morning to night.", a: "DAY" }
+      ]
+    },
+    {
+      id: "movies_18",
+      source: "Toy Story (1995)",
+      quote: "THERE'S A SNAKE IN MY BOOT",
+      questions: [
+        { q: "Short way to say 'there is'.", a: "THERE'S" },
+        { q: "A long, legless reptile.", a: "SNAKE" },
+        { q: "Inside, not outside.", a: "IN" },
+        { q: "Belonging to me.", a: "MY" },
+        { q: "A tall shoe that covers your ankle.", a: "BOOT" }
       ]
     }
   ],
@@ -224,6 +342,126 @@ const PUZZLE_DATA = {
         { q: "Not inside — the opposite of 'in'.", a: "OUT" },
         { q: "A place, not here.", a: "THERE" }
       ]
+    },
+    {
+      id: "series_09",
+      source: "How I Met Your Mother",
+      quote: "NOTHING SUITS ME LIKE A SUIT",
+      questions: [
+        { q: "Not a single thing.", a: "NOTHING" },
+        { q: "Fits well, or matches.", a: "SUITS" },
+        { q: "A word for the speaker.", a: "ME" },
+        { q: "Similar to.", a: "LIKE" },
+        { q: "A matching jacket and pants outfit.", a: "SUIT" }
+      ]
+    },
+    {
+      id: "series_10",
+      source: "Parks and Recreation",
+      quote: "I'M NOT ANGRY I'M JUST PASSIONATE",
+      questions: [
+        { q: "A word used to say no.", a: "NOT" },
+        { q: "Feeling really mad.", a: "ANGRY" },
+        { q: "Short way to say 'I am'.", a: "I'M" },
+        { q: "Only, simply.", a: "JUST" },
+        { q: "Having really strong feelings about something.", a: "PASSIONATE" }
+      ]
+    },
+    {
+      id: "series_11",
+      source: "Cheers",
+      quote: "WHERE EVERYBODY KNOWS YOUR NAME",
+      questions: [
+        { q: "Asking about a place.", a: "WHERE" },
+        { q: "Every single person.", a: "EVERYBODY" },
+        { q: "Understands, or is aware of.", a: "KNOWS" },
+        { q: "Belonging to you.", a: "YOUR" },
+        { q: "What people call you.", a: "NAME" }
+      ]
+    },
+    {
+      id: "series_12",
+      source: "Twin Peaks",
+      quote: "THE OWLS ARE NOT WHAT THEY SEEM",
+      questions: [
+        { q: "Birds that hunt at night and say 'hoo'.", a: "OWLS" },
+        { q: "Another way to say 'is', for many things.", a: "ARE" },
+        { q: "A word used to say no.", a: "NOT" },
+        { q: "A word used to ask about a thing.", a: "WHAT" },
+        { q: "Appear to be a certain way.", a: "SEEM" }
+      ]
+    },
+    {
+      id: "series_13",
+      source: "Grey's Anatomy",
+      quote: "IT'S A BEAUTIFUL DAY TO SAVE LIVES",
+      questions: [
+        { q: "Short way to say 'it is'.", a: "IT'S" },
+        { q: "Very pretty or lovely.", a: "BEAUTIFUL" },
+        { q: "24 hours, from morning to night.", a: "DAY" },
+        { q: "To rescue or keep safe.", a: "SAVE" },
+        { q: "More than one life.", a: "LIVES" }
+      ]
+    },
+    {
+      id: "series_14",
+      source: "Star Trek",
+      quote: "TO BOLDLY GO WHERE NO ONE HAS GONE BEFORE",
+      questions: [
+        { q: "Bravely, without fear.", a: "BOLDLY" },
+        { q: "To move or leave.", a: "GO" },
+        { q: "Asking about a place.", a: "WHERE" },
+        { q: "No longer here, left.", a: "GONE" },
+        { q: "Earlier than now.", a: "BEFORE" }
+      ]
+    },
+    {
+      id: "series_15",
+      source: "Community",
+      quote: "SIX SEASONS AND A MOVIE",
+      questions: [
+        { q: "The number after five.", a: "SIX" },
+        { q: "Parts of a TV show's run, like spring or summer.", a: "SEASONS" },
+        { q: "A word that joins two things together.", a: "AND" },
+        { q: "A small word before a noun.", a: "A" },
+        { q: "A film you watch.", a: "MOVIE" }
+      ]
+    },
+    {
+      id: "series_16",
+      source: "Ted Lasso",
+      quote: "IT'S THE HOPE THAT KILLS YOU",
+      questions: [
+        { q: "Short way to say 'it is'.", a: "IT'S" },
+        { q: "Wishing for something good to happen.", a: "HOPE" },
+        { q: "A word pointing to a specific thing.", a: "THAT" },
+        { q: "Ends the life of.", a: "KILLS" },
+        { q: "The person someone is talking to.", a: "YOU" }
+      ]
+    },
+    {
+      id: "series_17",
+      source: "Arrested Development",
+      quote: "THERE'S ALWAYS MONEY IN THE BANANA STAND",
+      questions: [
+        { q: "Short way to say 'there is'.", a: "THERE'S" },
+        { q: "Every single time.", a: "ALWAYS" },
+        { q: "Cash you use to buy things.", a: "MONEY" },
+        { q: "A long yellow fruit.", a: "BANANA" },
+        { q: "A small booth, or to be on your feet.", a: "STAND" }
+      ]
+    },
+    {
+      id: "series_18",
+      source: "Buffy the Vampire Slayer",
+      quote: "INTO EVERY GENERATION A SLAYER IS BORN",
+      questions: [
+        { q: "Moving toward the inside of something.", a: "INTO" },
+        { q: "Each one, without exception.", a: "EVERY" },
+        { q: "A group of people born around the same time.", a: "GENERATION" },
+        { q: "Someone who defeats monsters.", a: "SLAYER" },
+        { q: "Coming into life.", a: "BORN" }
+      ]
     }
   ],
 
@@ -322,6 +560,126 @@ const PUZZLE_DATA = {
         { q: "Good enough to be worth the time.", a: "WORTHWHILE" },
         { q: "Inside, not outside.", a: "IN" },
         { q: "The thing, all alone.", a: "ITSELF" }
+      ]
+    },
+    {
+      id: "history_09",
+      source: "Abraham Lincoln, Gettysburg Address",
+      quote: "GOVERNMENT OF THE PEOPLE BY THE PEOPLE FOR THE PEOPLE SHALL NOT PERISH",
+      questions: [
+        { q: "The group that runs a country.", a: "GOVERNMENT" },
+        { q: "Next to, or done through.", a: "BY" },
+        { q: "Meant for, intended for.", a: "FOR" },
+        { q: "An old-fashioned way to say 'will'.", a: "SHALL" },
+        { q: "To die out or be destroyed.", a: "PERISH" }
+      ]
+    },
+    {
+      id: "history_10",
+      source: "Thomas Edison",
+      quote: "GENIUS IS ONE PERCENT INSPIRATION AND NINETY NINE PERCENT PERSPIRATION",
+      questions: [
+        { q: "Someone extremely smart.", a: "GENIUS" },
+        { q: "A part out of a hundred.", a: "PERCENT" },
+        { q: "A spark of a great idea.", a: "INSPIRATION" },
+        { q: "The number 90.", a: "NINETY" },
+        { q: "Sweat from hard work.", a: "PERSPIRATION" }
+      ]
+    },
+    {
+      id: "history_11",
+      source: "Benjamin Franklin",
+      quote: "EARLY TO BED AND EARLY TO RISE MAKES A MAN HEALTHY WEALTHY AND WISE",
+      questions: [
+        { q: "The furniture you sleep on.", a: "BED" },
+        { q: "To get up, or to go higher.", a: "RISE" },
+        { q: "In good physical shape, not sick.", a: "HEALTHY" },
+        { q: "Having a lot of money.", a: "WEALTHY" },
+        { q: "Having good judgment and knowledge.", a: "WISE" }
+      ]
+    },
+    {
+      id: "history_12",
+      source: "Mahatma Gandhi",
+      quote: "BE THE CHANGE YOU WISH TO SEE IN THE WORLD",
+      questions: [
+        { q: "To make something different.", a: "CHANGE" },
+        { q: "To hope for something.", a: "WISH" },
+        { q: "To look at with your eyes.", a: "SEE" },
+        { q: "Inside, not outside.", a: "IN" },
+        { q: "The whole planet Earth.", a: "WORLD" }
+      ]
+    },
+    {
+      id: "history_13",
+      source: "Anne Frank",
+      quote: "WHERE THERE IS HOPE THERE IS LIFE",
+      questions: [
+        { q: "Asking about a place.", a: "WHERE" },
+        { q: "That spot, not here.", a: "THERE" },
+        { q: "A word meaning 'exists'.", a: "IS" },
+        { q: "Wishing for something good.", a: "HOPE" },
+        { q: "Being alive.", a: "LIFE" }
+      ]
+    },
+    {
+      id: "history_14",
+      source: "Theodore Roosevelt",
+      quote: "SPEAK SOFTLY AND CARRY A BIG STICK",
+      questions: [
+        { q: "To talk out loud.", a: "SPEAK" },
+        { q: "Quietly, gently.", a: "SOFTLY" },
+        { q: "To hold and take something with you.", a: "CARRY" },
+        { q: "Large in size.", a: "BIG" },
+        { q: "A thin piece of wood.", a: "STICK" }
+      ]
+    },
+    {
+      id: "history_15",
+      source: "George Washington",
+      quote: "IT IS BETTER TO OFFER NO EXCUSE THAN A BAD ONE",
+      questions: [
+        { q: "More good than something else.", a: "BETTER" },
+        { q: "To propose or give.", a: "OFFER" },
+        { q: "A reason you give for something wrong.", a: "EXCUSE" },
+        { q: "Not good.", a: "BAD" },
+        { q: "The number 1.", a: "ONE" }
+      ]
+    },
+    {
+      id: "history_16",
+      source: "Helen Keller",
+      quote: "ALONE WE CAN DO SO LITTLE TOGETHER WE CAN DO SO MUCH",
+      questions: [
+        { q: "By yourself, with no one else.", a: "ALONE" },
+        { q: "A small amount.", a: "LITTLE" },
+        { q: "With others, as a group.", a: "TOGETHER" },
+        { q: "A large amount.", a: "MUCH" },
+        { q: "To be able to.", a: "CAN" }
+      ]
+    },
+    {
+      id: "history_17",
+      source: "Confucius",
+      quote: "IT DOES NOT MATTER HOW SLOWLY YOU GO AS LONG AS YOU DO NOT STOP",
+      questions: [
+        { q: "To be important.", a: "MATTER" },
+        { q: "Not fast, taking your time.", a: "SLOWLY" },
+        { q: "To move or leave.", a: "GO" },
+        { q: "Taking a lot of time or distance.", a: "LONG" },
+        { q: "To not move anymore.", a: "STOP" }
+      ]
+    },
+    {
+      id: "history_18",
+      source: "Eleanor Roosevelt",
+      quote: "NO ONE CAN MAKE YOU FEEL INFERIOR WITHOUT YOUR CONSENT",
+      questions: [
+        { q: "Feeling less important than others.", a: "INFERIOR" },
+        { q: "Not having something.", a: "WITHOUT" },
+        { q: "Giving permission.", a: "CONSENT" },
+        { q: "To sense something inside you.", a: "FEEL" },
+        { q: "To create or cause.", a: "MAKE" }
       ]
     }
   ],
@@ -422,6 +780,126 @@ const PUZZLE_DATA = {
         { q: "Given this name.", a: "CALLED" },
         { q: "The name for a group of lions; also means feeling proud.", a: "PRIDE" }
       ]
+    },
+    {
+      id: "animals_09",
+      source: "Animal Fact File",
+      quote: "A BUTTERFLY TASTES WITH ITS FEET",
+      questions: [
+        { q: "A colorful flying insect.", a: "BUTTERFLY" },
+        { q: "Senses flavor.", a: "TASTES" },
+        { q: "Together, alongside.", a: "WITH" },
+        { q: "Belonging to it.", a: "ITS" },
+        { q: "The parts you stand on.", a: "FEET" }
+      ]
+    },
+    {
+      id: "animals_10",
+      source: "Animal Fact File",
+      quote: "A GROUP OF FROGS IS CALLED AN ARMY",
+      questions: [
+        { q: "A bunch of things together.", a: "GROUP" },
+        { q: "Small green jumping animals that say 'croak'.", a: "FROGS" },
+        { q: "Given this name.", a: "CALLED" },
+        { q: "A small word before a word starting with a vowel.", a: "AN" },
+        { q: "The surprising name for a group of frogs.", a: "ARMY" }
+      ]
+    },
+    {
+      id: "animals_11",
+      source: "Animal Fact File",
+      quote: "A GIRAFFE'S TONGUE CAN BE UP TO TWENTY INCHES LONG",
+      questions: [
+        { q: "Belongs to the tall, spotted animal.", a: "GIRAFFE'S" },
+        { q: "The part in your mouth used for tasting.", a: "TONGUE" },
+        { q: "The number 20.", a: "TWENTY" },
+        { q: "Small units used to measure length.", a: "INCHES" },
+        { q: "Taking up a lot of length.", a: "LONG" }
+      ]
+    },
+    {
+      id: "animals_12",
+      source: "Animal Fact File",
+      quote: "PENGUINS CAN'T FLY BUT THEY ARE EXCELLENT SWIMMERS",
+      questions: [
+        { q: "Black and white birds that live near ice.", a: "PENGUINS" },
+        { q: "Short way to say 'cannot'.", a: "CAN'T" },
+        { q: "To move through the air.", a: "FLY" },
+        { q: "Really, really good.", a: "EXCELLENT" },
+        { q: "People or animals that move through water well.", a: "SWIMMERS" }
+      ]
+    },
+    {
+      id: "animals_13",
+      source: "Animal Fact File",
+      quote: "A GROUP OF OWLS IS CALLED A PARLIAMENT",
+      questions: [
+        { q: "A bunch of things together.", a: "GROUP" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "Birds that hunt at night.", a: "OWLS" },
+        { q: "Given this name.", a: "CALLED" },
+        { q: "The fancy name for a group of owls.", a: "PARLIAMENT" }
+      ]
+    },
+    {
+      id: "animals_14",
+      source: "Animal Fact File",
+      quote: "KANGAROOS CANNOT WALK BACKWARDS BECAUSE OF THEIR TAILS",
+      questions: [
+        { q: "Hopping animals from Australia.", a: "KANGAROOS" },
+        { q: "To move by putting one foot in front of the other.", a: "WALK" },
+        { q: "In the reverse direction.", a: "BACKWARDS" },
+        { q: "Belonging to them.", a: "THEIR" },
+        { q: "The long parts at the back of many animals.", a: "TAILS" }
+      ]
+    },
+    {
+      id: "animals_15",
+      source: "Animal Fact File",
+      quote: "A SHRIMP'S HEART IS IN ITS HEAD",
+      questions: [
+        { q: "Belongs to a small sea creature.", a: "SHRIMP'S" },
+        { q: "The part that pumps blood.", a: "HEART" },
+        { q: "Inside, not outside.", a: "IN" },
+        { q: "Belonging to it.", a: "ITS" },
+        { q: "The top part of a body.", a: "HEAD" }
+      ]
+    },
+    {
+      id: "animals_16",
+      source: "Animal Fact File",
+      quote: "A GROUP OF RHINOS IS CALLED A CRASH",
+      questions: [
+        { q: "A bunch of things together.", a: "GROUP" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "Big gray animals with a horn on their nose.", a: "RHINOS" },
+        { q: "Given this name.", a: "CALLED" },
+        { q: "The loud name for a group of rhinos.", a: "CRASH" }
+      ]
+    },
+    {
+      id: "animals_17",
+      source: "Animal Fact File",
+      quote: "SEA OTTERS HOLD HANDS WHILE THEY SLEEP",
+      questions: [
+        { q: "Cute furry animals that swim in water.", a: "OTTERS" },
+        { q: "To grip something.", a: "HOLD" },
+        { q: "The parts at the end of your arms.", a: "HANDS" },
+        { q: "During the same time as.", a: "WHILE" },
+        { q: "To rest with your eyes closed.", a: "SLEEP" }
+      ]
+    },
+    {
+      id: "animals_18",
+      source: "Animal Fact File",
+      quote: "A DOG'S NOSE PRINT IS AS UNIQUE AS A HUMAN FINGERPRINT",
+      questions: [
+        { q: "Belongs to a common pet that barks.", a: "DOG'S" },
+        { q: "The part of your face used for smelling.", a: "NOSE" },
+        { q: "One of a kind, not like anything else.", a: "UNIQUE" },
+        { q: "Having to do with people.", a: "HUMAN" },
+        { q: "The tiny pattern on the tip of your finger.", a: "FINGERPRINT" }
+      ]
     }
   ],
 
@@ -520,6 +998,126 @@ const PUZZLE_DATA = {
         { q: "A word used to explain why.", a: "BECAUSE" },
         { q: "To own or hold something.", a: "HAVE" },
         { q: "A small word showing direction, like 'going __ school'.", a: "TO" }
+      ]
+    },
+    {
+      id: "music_09",
+      source: "Music Fact File",
+      quote: "THE PIANO HAS EIGHTY EIGHT KEYS",
+      questions: [
+        { q: "A big instrument you play with black and white keys.", a: "PIANO" },
+        { q: "Owns or holds.", a: "HAS" },
+        { q: "The number 80.", a: "EIGHTY" },
+        { q: "The number after seven.", a: "EIGHT" },
+        { q: "The black and white parts you press on a piano.", a: "KEYS" }
+      ]
+    },
+    {
+      id: "music_10",
+      source: "Music Fact File",
+      quote: "THE VIOLIN IS THE SMALLEST STRING INSTRUMENT IN AN ORCHESTRA",
+      questions: [
+        { q: "A small instrument played with a bow.", a: "VIOLIN" },
+        { q: "The tiniest one.", a: "SMALLEST" },
+        { q: "A thin wire you can pluck or bow.", a: "STRING" },
+        { q: "A tool used to make music.", a: "INSTRUMENT" },
+        { q: "A big group of musicians playing together.", a: "ORCHESTRA" }
+      ]
+    },
+    {
+      id: "music_11",
+      source: "Louis Armstrong, in interview",
+      quote: "IF YOU HAVE TO ASK WHAT JAZZ IS YOU WILL NEVER KNOW",
+      questions: [
+        { q: "To own or hold.", a: "HAVE" },
+        { q: "To say a question out loud.", a: "ASK" },
+        { q: "A music style with a lot of improvising.", a: "JAZZ" },
+        { q: "Not even one time.", a: "NEVER" },
+        { q: "To understand or be aware of.", a: "KNOW" }
+      ]
+    },
+    {
+      id: "music_12",
+      source: "Music Fact File",
+      quote: "A GROUP OF MUSICIANS IS CALLED A BAND",
+      questions: [
+        { q: "A bunch of things together.", a: "GROUP" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "People who play instruments or sing.", a: "MUSICIANS" },
+        { q: "Given this name.", a: "CALLED" },
+        { q: "A small group of musicians who play together.", a: "BAND" }
+      ]
+    },
+    {
+      id: "music_13",
+      source: "Aretha Franklin, in interview",
+      quote: "MUSIC DOES A LOT OF THINGS FOR A LOT OF PEOPLE",
+      questions: [
+        { q: "Sounds and songs you listen to.", a: "MUSIC" },
+        { q: "Performs or carries out.", a: "DOES" },
+        { q: "Objects or items.", a: "THINGS" },
+        { q: "A large amount.", a: "LOT" },
+        { q: "Human beings.", a: "PEOPLE" }
+      ]
+    },
+    {
+      id: "music_14",
+      source: "Music Fact File",
+      quote: "THE DRUM IS ONE OF THE OLDEST INSTRUMENTS IN THE WORLD",
+      questions: [
+        { q: "An instrument you hit to make a beat.", a: "DRUM" },
+        { q: "The one that's been around the longest.", a: "OLDEST" },
+        { q: "Tools used to make music.", a: "INSTRUMENTS" },
+        { q: "The whole planet Earth.", a: "WORLD" },
+        { q: "The number 1.", a: "ONE" }
+      ]
+    },
+    {
+      id: "music_15",
+      source: "Duke Ellington, in interview",
+      quote: "IF IT SOUNDS GOOD YOU ARE PLAYING IT RIGHT",
+      questions: [
+        { q: "Makes a certain kind of noise.", a: "SOUNDS" },
+        { q: "The opposite of bad.", a: "GOOD" },
+        { q: "Performing music.", a: "PLAYING" },
+        { q: "Correct, not wrong.", a: "RIGHT" },
+        { q: "A word for a thing already mentioned.", a: "IT" }
+      ]
+    },
+    {
+      id: "music_16",
+      source: "Music Fact File",
+      quote: "GUITARS USUALLY HAVE SIX STRINGS",
+      questions: [
+        { q: "Instruments you strum or pluck.", a: "GUITARS" },
+        { q: "Most of the time.", a: "USUALLY" },
+        { q: "To own or hold.", a: "HAVE" },
+        { q: "The number after five.", a: "SIX" },
+        { q: "Thin wires you pluck or strum.", a: "STRINGS" }
+      ]
+    },
+    {
+      id: "music_17",
+      source: "Stevie Wonder, in interview",
+      quote: "MUSIC IS A WORLD WITHIN ITSELF WITH A LANGUAGE WE ALL UNDERSTAND",
+      questions: [
+        { q: "The whole planet, or a whole space of its own.", a: "WORLD" },
+        { q: "Inside of.", a: "WITHIN" },
+        { q: "A way of communicating with words.", a: "LANGUAGE" },
+        { q: "Every single one.", a: "ALL" },
+        { q: "To know the meaning of something.", a: "UNDERSTAND" }
+      ]
+    },
+    {
+      id: "music_18",
+      source: "Music Fact File",
+      quote: "THE WORD ORCHESTRA COMES FROM AN ANCIENT GREEK WORD",
+      questions: [
+        { q: "A single unit of language, like this one.", a: "WORD" },
+        { q: "A big group of musicians.", a: "ORCHESTRA" },
+        { q: "Arrives, or originates.", a: "COMES" },
+        { q: "Extremely old, from a long time ago.", a: "ANCIENT" },
+        { q: "Related to Greece.", a: "GREEK" }
       ]
     }
   ]

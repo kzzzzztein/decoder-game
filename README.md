@@ -1,10 +1,17 @@
 # DECODE — The Quote Cipher Game
 
 A mobile-friendly puzzle game: every quote is scrambled into a cipher, and you
-answer 5 trivia clues to decode it, letter by letter, live as you type.
+answer 5 simple clues to decode it — live, letter by letter, no submit button.
+It's a real cryptogram: every letter on screen shares a cipher number with
+every other instance of that letter, so solving one box instantly reveals
+every matching box across the whole puzzle.
 
-**5 categories, 4 puzzles each right now (20 total)** — the data file is built
-so you (or I, in a follow-up) can expand every category up to 50 without
+Solving puzzles earns **hearts** (the in-game currency), there's a **daily
+reward** with a streak bonus, and progress can sync to an account via
+Firebase — or just run entirely on-device with zero setup.
+
+**5 categories, 18 puzzles each right now (90 total)** — working toward 50
+each (250 total). The data file is built so more can be appended without
 touching any game code. See "Adding more puzzles" below.
 
 No ads, no accounts, no backend. It's a single static site — 4 files.
@@ -72,26 +79,81 @@ version.
 
 ---
 
-## 4. How the puzzle mechanic works
+## 4. Accounts, hearts, and daily rewards
+
+The game now has a small progression economy:
+
+- **Hearts** are the currency. Solving a puzzle for the first time earns
+  hearts — more for a clean 3-star solve (no wrong letters), less for 1–2
+  stars. Re-solving an already-solved puzzle earns nothing (no farming).
+- **Daily reward** — a card on the home screen gives free hearts once every
+  24 hours, with a small streak bonus that grows the more consecutive days
+  you claim it (capped after 5 days).
+- **Account progression** — this is powered by Firebase behind the scenes:
+  a player is signed in anonymously (no login screen, it just happens), and
+  their hearts + solved puzzles + daily-claim state sync to a small
+  database document. This means progress survives reinstalling the app on
+  the same device, and it's the foundation for adding real sign-in later if
+  you ever want progress to follow someone across devices.
+
+**You don't have to set any of this up.** If you skip the Firebase steps
+below, `backend.js` automatically falls back to local-only mode — hearts,
+solved puzzles, and daily rewards all still work exactly the same, just
+saved on that one device instead of synced to the cloud. Nothing breaks
+either way.
+
+### Setting up Firebase (optional, free)
+
+1. Go to [console.firebase.google.com](https://console.firebase.google.com)
+   and create a new project (the free "Spark" plan is plenty for this).
+2. In the left sidebar: **Build → Authentication → Get started**. Under
+   "Sign-in method", enable **Anonymous**.
+3. In the left sidebar: **Build → Firestore Database → Create database**.
+   Start in production mode (we'll set rules below).
+4. Go to **Project settings** (the gear icon) → scroll to "Your apps" →
+   click the **</>** (web) icon to register a web app. Copy the config
+   object it gives you.
+5. Paste those values into `firebase-config.js`, replacing the placeholder
+   strings.
+6. In Firestore, go to the **Rules** tab and replace the default rules with:
+   ```
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /players/{uid} {
+         allow read, write: if request.auth != null && request.auth.uid == uid;
+       }
+     }
+   }
+   ```
+   This makes sure each player can only ever read or write their own data.
+7. Reload the game. Open your browser's dev console — if you see no
+   Firebase errors, it's connected. Progress will now appear as a document
+   under `players/<some-id>` in the Firestore console.
+
+## 5. How the puzzle mechanic works
 
 - `data.js` holds every puzzle as `{ id, source, quote, questions }`.
 - `questions` is always an array of exactly 5 `{ q, a }` pairs — `a` must be
   spelled exactly as it appears in `quote` (matching is case-insensitive and
   ignores punctuation except apostrophes).
 - The game engine (`app.js`) scans the quote word by word. Any word that
-  matches one of the 5 answers becomes a blank; everything else stays
-  visible as a connector word (like "the", "is", "a").
-- Typing in a clue's input box fills that word's blank letters live, one
-  keystroke at a time — no need to press submit to see it happen.
-- Each letter also shows a small number underneath it — a fixed
-  substitution cipher (A–Z shuffled, e.g. P = 7) purely for the
-  "decoder" visual flavor.
-- Pressing **Check answers** grades all 5 clues at once. Get all 5 right and
-  the full quote is revealed along with its source, progress saves to the
-  phone's local storage, and a star rating pops up (3 stars if you solved it
-  on the first check).
+  matches one of the 5 answers becomes a row of individual letter boxes;
+  everything else stays visible as a connector word (like "the", "is", "a").
+- Each clue also gets its own row of letter boxes to type the answer into —
+  one letter per box, auto-advancing as you type.
+- Every letter, in both the quote and the answer boxes, shows a small
+  cipher number underneath it (A–Z shuffled, e.g. P = 7). That number is
+  the real mechanic: type a letter correctly in **any** box, and every
+  other box sharing that same letter — in the quote, and in every other
+  clue's answer row — reveals instantly. No submit button needed.
+- Type a wrong letter and just that box flashes red so you know to try
+  again; nothing else is affected.
+- The puzzle auto-completes the moment every letter is solved: the full
+  quote and its source reveal, progress saves to the phone's local
+  storage, and a star rating pops up (3 stars for zero mistakes).
 
-## 5. Adding more puzzles (scaling up to 50 per category)
+## 6. Adding more puzzles (scaling up to 50 per category)
 
 Just append more objects to the right array in `data.js`:
 
@@ -99,22 +161,24 @@ Just append more objects to the right array in `data.js`:
 movies: [
   // ...existing puzzles...
   {
-    id: "movies_05",
+    id: "movies_09",
     source: "Movie Title (Year)",
     quote: "YOUR QUOTE WRITTEN IN CAPS SEPARATED BY SPACES",
     questions: [
-      { q: "Clue for word 1", a: "WORD1" },
-      { q: "Clue for word 2", a: "WORD2" },
-      { q: "Clue for word 3", a: "WORD3" },
-      { q: "Clue for word 4", a: "WORD4" },
-      { q: "Clue for word 5", a: "WORD5" }
+      { q: "Simple, casual clue for word 1", a: "WORD1" },
+      { q: "Simple, casual clue for word 2", a: "WORD2" },
+      { q: "Simple, casual clue for word 3", a: "WORD3" },
+      { q: "Simple, casual clue for word 4", a: "WORD4" },
+      { q: "Simple, casual clue for word 5", a: "WORD5" }
     ]
   }
 ]
 ```
 
-Nothing else needs to change — the picker screen, progress tracker, and
-score counter all read the array length automatically.
+Keep clues casual, like you're explaining a word to a friend — "a type of
+living thing" for ANIMAL, not a dictionary definition. Nothing else needs
+to change — the picker screen, progress tracker, and score counter all
+read the array length automatically.
 
 **One content note:** the Music category uses short *spoken* quotes from
 musicians (interviews, sayings) rather than song lyrics. Reproducing actual
@@ -123,14 +187,16 @@ private one — copyright holders can and do issue takedowns on exactly this
 kind of use. Sticking to spoken quotes and music trivia keeps the category
 totally safe.
 
-## 6. File structure
+## 7. File structure
 
 ```
 decoder-game/
-├── index.html      the app shell (all screens)
-├── style.css        the visual theme
-├── app.js           game engine + interactions
-├── data.js          all puzzle content — edit this to add puzzles
-├── manifest.json    lets phones "install" it as an app icon
-└── README.md        this file
+├── index.html         the app shell (all screens)
+├── style.css          the visual theme
+├── app.js             game engine + interactions
+├── data.js            all puzzle content — edit this to add puzzles
+├── backend.js         accounts, hearts, daily reward (Firebase or local)
+├── firebase-config.js your Firebase project keys (optional — see § 4)
+├── manifest.json      lets phones "install" it as an app icon
+└── README.md          this file
 ```

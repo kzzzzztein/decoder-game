@@ -1,9 +1,6 @@
-/* DECODE — Game Engine v2
-   Letter-box answers, live per-keystroke validation, and a real
-   cryptogram cross-reveal: solve one letter, every box sharing that
-   letter's cipher number lights up everywhere in the puzzle. */
-
-const STORAGE_KEY = "decode_progress_v1";
+/* DECODE — Game Engine v3
+   Letter-box answers, live per-keystroke validation, cipher cross-reveal,
+   and account progression (hearts + daily reward) via backend.js. */
 
 let state = {
   category: null,
@@ -15,26 +12,12 @@ let state = {
   solvedThisRound: false
 };
 
-// ---------------- Progress persistence ----------------
-function loadProgress() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
-  catch (e) { return {}; }
-}
-function saveProgress(p) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
-}
-function markSolved(category, puzzleId) {
-  const p = loadProgress();
-  if (!p[category]) p[category] = [];
-  if (!p[category].includes(puzzleId)) p[category].push(puzzleId);
-  saveProgress(p);
-}
+// ---------------- Progress / hearts (via Backend) ----------------
 function isSolved(category, puzzleId) {
-  const p = loadProgress();
-  return !!(p[category] && p[category].includes(puzzleId));
+  return Backend.isPuzzleSolved(category, puzzleId);
 }
 function totalSolvedCount() {
-  return Object.values(loadProgress()).reduce((s, a) => s + a.length, 0);
+  return Backend.totalSolvedCount();
 }
 function totalPuzzleCount() {
   return Object.values(PUZZLE_DATA).reduce((s, a) => s + a.length, 0);
@@ -43,6 +26,47 @@ function updateScorePill() {
   document.getElementById("scorePill").textContent =
     `★ ${totalSolvedCount()} / ${totalPuzzleCount()}`;
 }
+function updateHeartsPill() {
+  const hearts = Backend.getPlayerData().hearts || 0;
+  document.getElementById("heartsPill").textContent = `♥ ${hearts}`;
+}
+Backend.onPlayerDataChange(() => {
+  updateHeartsPill();
+  updateScorePill();
+  const homeActive = document.getElementById("screen-home").classList.contains("active");
+  if (homeActive) renderHome();
+});
+
+// ---------------- Daily reward ----------------
+function renderDailyCard() {
+  const btn = document.getElementById("dailyBtn");
+  const sub = document.getElementById("dailySub");
+  const player = Backend.getPlayerData();
+
+  if (Backend.canClaimDaily()) {
+    btn.disabled = false;
+    btn.textContent = "Claim";
+    sub.textContent = player.streak > 0
+      ? `${player.streak} day streak — come back for more.`
+      : "Come back every day for free hearts.";
+  } else {
+    btn.disabled = true;
+    btn.textContent = "Claimed";
+    sub.textContent = `Claimed today · ${player.streak} day streak. Come back tomorrow!`;
+  }
+}
+
+document.getElementById("dailyBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("dailyBtn");
+  btn.disabled = true;
+  const result = await Backend.claimDailyReward();
+  if (result) {
+    document.getElementById("dailySub").textContent =
+      `+${result.reward} ♥ claimed! ${result.streak} day streak.`;
+    updateHeartsPill();
+  }
+  renderDailyCard();
+});
 
 // ---------------- Screen navigation ----------------
 function showScreen(id) {
@@ -83,6 +107,7 @@ function renderHome() {
     list.appendChild(tile);
   });
   updateScorePill();
+  renderDailyCard();
   showScreen("screen-home");
 }
 
@@ -327,19 +352,23 @@ document.getElementById("clearBtn").addEventListener("click", () => {
 });
 
 // ---------------- Win handling ----------------
-function handleWin(puzzle) {
+async function handleWin(puzzle) {
   if (state.solvedThisRound) return;
   state.solvedThisRound = true;
 
-  markSolved(state.category, puzzle.id);
+  const stars = state.mistakes === 0 ? 3 : state.mistakes <= 3 ? 2 : 1;
+  const reward = await Backend.recordSolve(state.category, puzzle.id, stars);
+
   document.getElementById("sourceText").textContent = puzzle.source;
   document.getElementById("sourceReveal").classList.add("show");
   updateScorePill();
+  updateHeartsPill();
 
-  const stars = state.mistakes === 0 ? 3 : state.mistakes <= 3 ? 2 : 1;
   document.getElementById("winStars").textContent = "★★★".slice(0, stars) + "☆☆☆".slice(0, 3 - stars);
   document.getElementById("winQuote").textContent = puzzle.quote;
   document.getElementById("winSource").textContent = "— " + puzzle.source;
+  document.getElementById("heartsEarned").textContent =
+    reward > 0 ? `+${reward} ♥ earned` : "Already solved — no bonus hearts";
 
   setTimeout(() => {
     document.getElementById("winOverlay").style.display = "flex";
@@ -358,9 +387,12 @@ document.getElementById("winNextBtn").addEventListener("click", () => {
 });
 
 // ---------------- Developer note / boot ----------------
-document.getElementById("startGameBtn").addEventListener("click", () => {
+const backendReady = Backend.initBackend();
+
+document.getElementById("startGameBtn").addEventListener("click", async () => {
   document.getElementById("devNoteModal").style.display = "none";
+  await backendReady;
   renderHome();
 });
 
-renderHome();
+renderHome(); // snappy first paint behind the modal; refreshes once Backend resolves
