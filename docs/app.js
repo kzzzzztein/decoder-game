@@ -78,6 +78,7 @@ document.querySelectorAll("[data-nav]").forEach(btn => {
     const target = btn.getAttribute("data-nav");
     if (target === "home") renderHome();
     if (target === "picker") renderPicker(state.category);
+    if (target === "pet") Pet.renderPet();
   });
 });
 

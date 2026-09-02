@@ -37,6 +37,15 @@
       <button class="daily-btn" id="dailyBtn">Claim</button>
     </div>
 
+    <button class="pet-card" data-nav="pet">
+      <div class="pet-card-icon">🐣</div>
+      <div class="pet-card-info">
+        <div class="pet-card-title">Visit your pet</div>
+        <div class="pet-card-sub">Feed, brush, and play with your blob.</div>
+      </div>
+      <div class="chev">›</div>
+    </button>
+
     <div class="category-list" id="categoryList"></div>
     <footer class="credit">made with ❤ · for Ann</footer>
   </section>
@@ -74,6 +83,85 @@
     </div>
   </section>
 
+  <!-- ============ PET SCREEN ============ -->
+  <section class="screen" id="screen-pet">
+    <div class="topbar" style="padding-top:16px;">
+      <button class="back-btn" data-nav="home">‹ Home</button>
+      <div class="pill pill-hearts" id="petHeartsLabel">♥ 0</div>
+    </div>
+
+    <div class="pet-name-row">
+      <h1 id="petName">Blob</h1>
+    </div>
+
+    <div class="pet-stage" id="petStage"></div>
+
+    <div class="pet-stats">
+      <div class="stat-row">
+        <span class="stat-label">🍖 Hunger</span>
+        <div class="stat-bar"><div class="stat-bar-fill bar-good" id="bar-hunger-fill"></div></div>
+        <span class="stat-pct" id="bar-hunger-label">100%</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">🛁 Hygiene</span>
+        <div class="stat-bar"><div class="stat-bar-fill bar-good" id="bar-hygiene-fill"></div></div>
+        <span class="stat-pct" id="bar-hygiene-label">100%</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">😊 Happiness</span>
+        <div class="stat-bar"><div class="stat-bar-fill bar-good" id="bar-happiness-fill"></div></div>
+        <span class="stat-pct" id="bar-happiness-label">100%</span>
+      </div>
+    </div>
+
+    <div class="pet-actions">
+      <button class="pet-action-btn" id="petFeedBtn"><span>🍎</span>Feed</button>
+      <button class="pet-action-btn" id="petCleanBtn"><span>🧼</span>Brush</button>
+      <button class="pet-action-btn" id="petPlayBtn"><span>🎮</span>Play</button>
+      <button class="pet-action-btn" id="petShopBtn"><span>🛍️</span>Shop</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ FEED PICKER ============ -->
+<div class="modal-backdrop" id="feedOverlay" style="display:none;">
+  <div class="note-card">
+    <span class="stamp">FEED</span>
+    <h2>What should Blob eat?</h2>
+    <div class="feed-list" id="feedList"></div>
+    <button class="btn btn-ghost" id="feedCloseBtn" style="margin-top:14px;">Close</button>
+  </div>
+</div>
+
+<!-- ============ SHOP ============ -->
+<div class="modal-backdrop" id="shopOverlay" style="display:none;">
+  <div class="note-card shop-card">
+    <span class="stamp">SHOP</span>
+    <h2>Blob's Shop</h2>
+    <div class="shop-section-title">Food</div>
+    <div class="shop-list" id="shopFood"></div>
+    <div class="shop-section-title">Accessories</div>
+    <div class="shop-list" id="shopAccessories"></div>
+    <button class="btn btn-ghost" id="shopCloseBtn" style="margin-top:14px;">Close</button>
+  </div>
+</div>
+
+<!-- ============ MINI-GAME: CATCH THE HEARTS ============ -->
+<div class="modal-backdrop" id="gameOverlay" style="display:none;">
+  <div class="note-card game-card">
+    <span class="stamp">PLAY</span>
+    <h2>Catch the Hearts!</h2>
+    <div class="game-hud">
+      <span id="gameScoreLabel">Score: 0</span>
+      <span id="gameTimeLabel">20s</span>
+    </div>
+    <div class="game-field" id="gameField"></div>
+    <div class="game-result" id="gameResult" style="display:none;">
+      <p id="gameResultText"></p>
+    </div>
+    <button class="btn btn-ghost" id="gameCloseBtn" style="margin-top:14px;">Close</button>
+  </div>
 </div>
 
 <!-- ============ DEVELOPER NOTE (shown first) ============ -->
@@ -109,6 +197,7 @@
 <script src="firebase-config.js"></script>
 <script src="backend.js"></script>
 <script src="data.js"></script>
+<script src="pet.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

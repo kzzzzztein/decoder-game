@@ -25,11 +25,40 @@ const Backend = (() => {
   const DAILY_STREAK_BONUS_PER_DAY = 5;
   const DAILY_STREAK_CAP_DAYS = 5;
 
+  // ---------------- pet shop catalogs (exported for pet.js to render) ----------------
+  const FOOD_CATALOG = [
+    { id: "berry",    name: "Berry",    emoji: "🍓", cost: 5,  restore: 15 },
+    { id: "sandwich", name: "Sandwich", emoji: "🥪", cost: 12, restore: 35 },
+    { id: "feast",    name: "Feast",    emoji: "🍱", cost: 25, restore: 70 }
+  ];
+  const ACCESSORY_CATALOG = [
+    { id: "bowtie",     name: "Bow Tie",     emoji: "🎀" , cost: 20 },
+    { id: "partyhat",   name: "Party Hat",   emoji: "🎉", cost: 20 },
+    { id: "sunglasses", name: "Sunglasses",  emoji: "🕶️", cost: 25 },
+    { id: "scarf",      name: "Scarf",       emoji: "🧣", cost: 25 }
+  ];
+  const PET_DECAY_PER_HOUR = 2;   // each stat drops this much per real hour
+  const CLEAN_GAIN = 25;
+  const MAX_STAT = 100;
+
   let useFirebase = false;
   let db = null;
   let uid = null;
   let playerData = null;
   const listeners = [];
+
+  function defaultPet() {
+    return {
+      name: "Blob",
+      hunger: 100,
+      hygiene: 100,
+      happiness: 100,
+      lastUpdate: Date.now(),
+      inventory: {},        // { berry: 2, sandwich: 1, ... }
+      owned: [],            // accessory ids purchased
+      equipped: null         // accessory id currently worn, or null
+    };
+  }
 
   function defaultPlayerData() {
     // Builds the solved-categories map from whatever categories exist in
@@ -44,8 +73,17 @@ const Backend = (() => {
       hearts: 0,
       solved,
       lastDailyClaim: null,
-      streak: 0
+      streak: 0,
+      pet: defaultPet()
     };
+  }
+
+  function hydrate(saved) {
+    const base = defaultPlayerData();
+    const merged = Object.assign({}, base, saved || {});
+    merged.pet = Object.assign({}, base.pet, (saved && saved.pet) || {});
+    merged.solved = Object.assign({}, base.solved, (saved && saved.solved) || {});
+    return merged;
   }
 
   function todayStr(date = new Date()) {
@@ -65,7 +103,7 @@ const Backend = (() => {
   function loadLocal() {
     try {
       const raw = localStorage.getItem(LOCAL_KEY);
-      return raw ? Object.assign(defaultPlayerData(), JSON.parse(raw)) : defaultPlayerData();
+      return raw ? hydrate(JSON.parse(raw)) : defaultPlayerData();
     } catch (e) { return defaultPlayerData(); }
   }
   function saveLocal() {
@@ -101,14 +139,14 @@ const Backend = (() => {
     const ref = db.collection("players").doc(uid);
     const snap = await ref.get();
     if (snap.exists) {
-      playerData = Object.assign(defaultPlayerData(), snap.data());
+      playerData = hydrate(snap.data());
     } else {
       playerData = defaultPlayerData();
       await ref.set(playerData);
     }
     ref.onSnapshot(s => {
       if (s.exists) {
-        playerData = Object.assign(defaultPlayerData(), s.data());
+        playerData = hydrate(s.data());
         notify();
       }
     });
@@ -192,6 +230,100 @@ const Backend = (() => {
     return { reward, streak: playerData.streak };
   }
 
+  // ---------------- pet care ----------------
+
+  // Applies real-time decay since the pet was last checked on, then
+  // persists the new stat values + timestamp. Safe to call every time the
+  // pet screen opens — if called again moments later, elapsed time is
+  // ~0 so nothing changes.
+  async function applyPetDecay() {
+    if (!playerData) return;
+    const pet = playerData.pet;
+    const now = Date.now();
+    const hoursElapsed = Math.max(0, (now - (pet.lastUpdate || now)) / 3600000);
+    if (hoursElapsed > 0) {
+      const drop = hoursElapsed * PET_DECAY_PER_HOUR;
+      pet.hunger = Math.max(0, pet.hunger - drop);
+      pet.hygiene = Math.max(0, pet.hygiene - drop);
+      pet.happiness = Math.max(0, pet.happiness - drop);
+      pet.lastUpdate = now;
+      await persist();
+    }
+  }
+
+  function getPetMood() {
+    const pet = getPlayerData().pet;
+    const avg = (pet.hunger + pet.hygiene + pet.happiness) / 3;
+    if (avg >= 70) return "happy";
+    if (avg >= 40) return "neutral";
+    if (avg >= 20) return "sad";
+    return "sick";
+  }
+
+  async function spendHearts(amount) {
+    if (!playerData || (playerData.hearts || 0) < amount) return false;
+    playerData.hearts -= amount;
+    await persist();
+    return true;
+  }
+
+  // Feeds using one unit of the given food from inventory. Returns
+  // { success, reason? }.
+  async function feedPet(foodId) {
+    if (!playerData) return { success: false, reason: "not-ready" };
+    const food = FOOD_CATALOG.find(f => f.id === foodId);
+    if (!food) return { success: false, reason: "unknown-food" };
+    const have = playerData.pet.inventory[foodId] || 0;
+    if (have <= 0) return { success: false, reason: "out-of-stock" };
+    playerData.pet.inventory[foodId] = have - 1;
+    playerData.pet.hunger = Math.min(MAX_STAT, playerData.pet.hunger + food.restore);
+    await persist();
+    return { success: true };
+  }
+
+  async function cleanPet() {
+    if (!playerData) return;
+    playerData.pet.hygiene = Math.min(MAX_STAT, playerData.pet.hygiene + CLEAN_GAIN);
+    await persist();
+  }
+
+  // Called when the mini-game ends. Adds happiness (capped) and a small
+  // hearts bonus based on score.
+  async function applyPlayResult(happinessGain, heartsBonus) {
+    if (!playerData) return;
+    playerData.pet.happiness = Math.min(MAX_STAT, playerData.pet.happiness + happinessGain);
+    playerData.hearts = (playerData.hearts || 0) + (heartsBonus || 0);
+    await persist();
+  }
+
+  async function buyFood(foodId) {
+    const food = FOOD_CATALOG.find(f => f.id === foodId);
+    if (!food) return { success: false, reason: "unknown-item" };
+    const ok = await spendHearts(food.cost);
+    if (!ok) return { success: false, reason: "not-enough-hearts" };
+    playerData.pet.inventory[foodId] = (playerData.pet.inventory[foodId] || 0) + 1;
+    await persist();
+    return { success: true };
+  }
+
+  async function buyAccessory(accessoryId) {
+    const item = ACCESSORY_CATALOG.find(a => a.id === accessoryId);
+    if (!item) return { success: false, reason: "unknown-item" };
+    if (playerData.pet.owned.includes(accessoryId)) return { success: false, reason: "already-owned" };
+    const ok = await spendHearts(item.cost);
+    if (!ok) return { success: false, reason: "not-enough-hearts" };
+    playerData.pet.owned.push(accessoryId);
+    await persist();
+    return { success: true };
+  }
+
+  async function equipAccessory(accessoryId) {
+    if (!playerData) return;
+    if (accessoryId !== null && !playerData.pet.owned.includes(accessoryId)) return;
+    playerData.pet.equipped = playerData.pet.equipped === accessoryId ? null : accessoryId;
+    await persist();
+  }
+
   return {
     initBackend,
     getPlayerData,
@@ -201,6 +333,17 @@ const Backend = (() => {
     recordSolve,
     canClaimDaily,
     claimDailyReward,
-    onPlayerDataChange
+    onPlayerDataChange,
+    FOOD_CATALOG,
+    ACCESSORY_CATALOG,
+    applyPetDecay,
+    getPetMood,
+    spendHearts,
+    feedPet,
+    cleanPet,
+    applyPlayResult,
+    buyFood,
+    buyAccessory,
+    equipAccessory
   };
 })();

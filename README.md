@@ -129,7 +129,32 @@ either way.
    Firebase errors, it's connected. Progress will now appear as a document
    under `players/<some-id>` in the Firestore console.
 
-## 5. How the puzzle mechanic works
+## 5. Your pet (v1)
+
+A kawaii blob companion lives on its own screen (tap "Visit your pet" on
+the home screen). It's a real Tamagotchi-style system:
+
+- **3 stats** — Hunger, Hygiene, Happiness (0–100), each decaying by 2
+  points per real hour since you last checked in. Neglect it and its
+  face changes: happy → neutral → sad → sick, with a little idle
+  breathing animation that changes pace with mood.
+- **Feed** — costs a food item from your inventory (bought in the shop).
+  Berries are cheap and restore a little; Feasts cost more and restore a
+  lot.
+- **Brush** — free, instantly restores hygiene.
+- **Play** — opens a 20-second "Catch the Hearts" mini-game. Your score
+  converts into happiness gained and a small hearts bonus.
+- **Shop** — spend hearts on food (consumable) or accessories (permanent,
+  equip/unequip anytime — bow tie, party hat, sunglasses, scarf so far).
+
+This is intentionally v1 of a "deep" system: 3 stats, 3 foods, 4
+accessories, 1 mini-game. Everything is catalog-driven in `backend.js`
+(`FOOD_CATALOG`, `ACCESSORY_CATALOG`) and `pet.js` (`FACES`,
+`ACCESSORY_SVG`), so adding a new food, a new outfit, or a second
+mini-game doesn't require restructuring anything — just add an entry and
+(for accessories) an SVG snippet for how it sits on the blob.
+
+## 6. How the puzzle mechanic works
 
 - `data.js` holds every puzzle as `{ id, source, quote, questions }`.
 - `questions` is always an array of exactly 5 `{ q, a }` pairs — `a` must be
@@ -151,7 +176,7 @@ either way.
   quote and its source reveal, progress saves to the phone's local
   storage, and a star rating pops up (3 stars for zero mistakes).
 
-## 6. Adding more puzzles (scaling up to 50 per category)
+## 7. Adding more puzzles (scaling up to 50 per category)
 
 Just append more objects to the right array in `data.js`:
 
@@ -185,7 +210,7 @@ private one — copyright holders can and do issue takedowns on exactly this
 kind of use. Sticking to spoken quotes and music trivia keeps the category
 totally safe.
 
-## 7. File structure
+## 8. File structure
 
 ```
 decoder-game/
@@ -198,9 +223,10 @@ decoder-game/
 └── docs/
     ├── index.html         the app shell (all screens)
     ├── style.css          the visual theme
-    ├── app.js             game engine + interactions
+    ├── app.js             puzzle game engine + interactions
     ├── data.js            all puzzle content — edit this to add puzzles
-    ├── backend.js         accounts, hearts, daily reward (Firebase or local)
+    ├── backend.js         accounts, hearts, daily reward, pet economy
+    ├── pet.js             the virtual pet screen, shop, and mini-game
     ├── firebase-config.js your Firebase project keys (already filled in)
     └── manifest.json      lets phones "install" it as an app icon
 ```
