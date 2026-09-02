@@ -33,20 +33,18 @@ python3 -m http.server 8080
 
 ## 2. Deploy free on GitHub Pages
 
-1. Create a new GitHub repo (e.g. `decode-game`).
-2. Push these files to the repo root (or a `/docs` folder):
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: DECODE puzzle game"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/decode-game.git
-   git push -u origin main
-   ```
-3. In the repo: **Settings → Pages → Build and deployment → Source** → select
-   `Deploy from a branch`, branch `main`, folder `/ (root)`. Save.
+1. This zip already matches your existing `decoder-game` repo's structure —
+   just extract it and copy everything over your current repo folder on
+   disk (overwrite when asked), replacing the old `www` folder with the
+   new `docs` folder.
+2. In GitHub Desktop: it'll show all the changed/added/removed files.
+   Write a commit message like "Move web files to docs folder" and commit
+   to `main`, then push.
+3. In your repo on GitHub.com: **Settings → Pages → Build and deployment →
+   Source** → confirm it's `Deploy from a branch`, branch `main`, folder
+   `/docs`. Save if you change anything.
 4. After a minute, your game is live at:
-   `https://<your-username>.github.io/decode-game/`
+   `https://kzzzzztein.github.io/decoder-game/`
 
 That link works on any phone browser already — you can share it directly.
 
@@ -191,12 +189,18 @@ totally safe.
 
 ```
 decoder-game/
-├── index.html         the app shell (all screens)
-├── style.css          the visual theme
-├── app.js             game engine + interactions
-├── data.js            all puzzle content — edit this to add puzzles
-├── backend.js         accounts, hearts, daily reward (Firebase or local)
-├── firebase-config.js your Firebase project keys (optional — see § 4)
-├── manifest.json      lets phones "install" it as an app icon
-└── README.md          this file
+├── package.json
+├── capacitor.config.json
+├── .github/
+│   └── workflows/
+│       └── build-apk.yml
+├── README.md            this file
+└── docs/
+    ├── index.html         the app shell (all screens)
+    ├── style.css          the visual theme
+    ├── app.js             game engine + interactions
+    ├── data.js            all puzzle content — edit this to add puzzles
+    ├── backend.js         accounts, hearts, daily reward (Firebase or local)
+    ├── firebase-config.js your Firebase project keys (already filled in)
+    └── manifest.json      lets phones "install" it as an app icon
 ```

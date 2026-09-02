@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#FFF3F7">
+<title>DECODE — The Quote Cipher Game</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ TOP BAR ============ -->
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>DECODE</div>
+    <div class="topbar-stats">
+      <div class="pill pill-hearts" id="heartsPill">♥ 0</div>
+      <div class="pill pill-score" id="scorePill">★ 0 / 0</div>
+    </div>
+  </div>
+
+  <!-- ============ HOME / CATEGORIES ============ -->
+  <section class="screen" id="screen-home">
+    <div class="home-hero">
+      <h1>Crack the quote.</h1>
+      <p>Every line's been scrambled into a cipher. Answer the clues, fill in the blanks, reveal the quote.</p>
+    </div>
+
+    <div class="daily-card" id="dailyCard">
+      <div class="daily-icon">🎁</div>
+      <div class="daily-info">
+        <div class="daily-title">Daily Reward</div>
+        <div class="daily-sub" id="dailySub">Come back every day for free hearts.</div>
+      </div>
+      <button class="daily-btn" id="dailyBtn">Claim</button>
+    </div>
+
+    <div class="category-list" id="categoryList"></div>
+    <footer class="credit">made with ❤ · for Ann</footer>
+  </section>
+
+  <!-- ============ PUZZLE PICKER ============ -->
+  <section class="screen" id="screen-picker">
+    <div class="topbar" style="padding-top:16px;">
+      <button class="back-btn" data-nav="home">‹ Categories</button>
+    </div>
+    <div class="home-hero">
+      <h1 id="pickerTitle">Category</h1>
+      <p id="pickerSub">Pick a case to crack.</p>
+    </div>
+    <div class="chip-grid" id="chipGrid"></div>
+  </section>
+
+  <!-- ============ GAME SCREEN ============ -->
+  <section class="screen" id="screen-game">
+    <div class="topbar" style="padding-top:16px;">
+      <button class="back-btn" data-nav="picker">‹ Puzzles</button>
+    </div>
+    <div class="game-header">
+      <div class="cat-label">CASE FILE · <b id="gameCatLabel">MOVIES</b></div>
+    </div>
+
+    <div class="quote-panel">
+      <div class="quote-line" id="quoteLine"></div>
+      <div class="source-reveal" id="sourceReveal">Source: <b id="sourceText"></b></div>
+    </div>
+
+    <div class="questions" id="questionsList"></div>
+
+    <div class="game-footer">
+      <button class="btn btn-ghost" id="clearBtn">↺ Restart this puzzle</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ DEVELOPER NOTE (shown first) ============ -->
+<div class="modal-backdrop" id="devNoteModal">
+  <div class="note-card">
+    <span class="stamp">DEV NOTE</span>
+    <h2>Hi my love, my Annn 💌</h2>
+    <p>I know you want to play this game, but there are too many damn ads out there.</p>
+    <p>So I made this one for you, babe. No ads. Just us and some puzzles.</p>
+    <p class="sign">Hope you like it. Mwa <span class="heart">♥</span></p>
+    <button class="btn btn-primary" id="startGameBtn" style="margin-top:6px;">Let's play</button>
+  </div>
+</div>
+
+<!-- ============ WIN OVERLAY ============ -->
+<div class="win-overlay" id="winOverlay" style="display:none;">
+  <div class="win-card">
+    <div class="stars" id="winStars">★★★</div>
+    <h2>Case cracked!</h2>
+    <div class="quote-final" id="winQuote"></div>
+    <div class="src" id="winSource"></div>
+    <div class="hearts-earned" id="heartsEarned"></div>
+    <div class="win-actions">
+      <button class="btn btn-ghost" id="winPickerBtn">More puzzles</button>
+      <button class="btn btn-primary" id="winNextBtn">Next ›</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="backend.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

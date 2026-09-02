@@ -1,6 +1,6 @@
 {
   "appId": "com.ann.decode",
   "appName": "DECODE",
-  "webDir": "www",
+  "webDir": "docs",
   "bundledWebRuntime": false
 }
