@@ -92,6 +92,7 @@
 
     <div class="pet-name-row">
       <h1 id="petName">Blob</h1>
+      <button class="pet-name-edit-btn" id="petNameEditBtn">✏️</button>
     </div>
 
     <div class="pet-stage" id="petStage"></div>
@@ -122,6 +123,21 @@
     </div>
   </section>
 
+</div>
+
+<!-- ============ CUSTOMIZE PET ============ -->
+<div class="modal-backdrop" id="customizeOverlay" style="display:none;">
+  <div class="note-card">
+    <span class="stamp">CUSTOMIZE</span>
+    <h2>Meet your blob!</h2>
+    <p>Give it a name and pick its color.</p>
+    <input type="text" id="customizeNameInput" class="customize-name-input" maxlength="16" placeholder="Blob's name">
+    <div class="color-swatch-grid" id="customizeSwatches"></div>
+    <div class="win-actions" style="margin-top:16px;">
+      <button class="btn btn-ghost" id="customizeCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="customizeSaveBtn">Save</button>
+    </div>
+  </div>
 </div>
 
 <!-- ============ FEED PICKER ============ -->

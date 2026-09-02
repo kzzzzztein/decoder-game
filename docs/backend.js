@@ -47,9 +47,13 @@ const Backend = (() => {
   let playerData = null;
   const listeners = [];
 
+  const PET_COLORS = ["#FFD9E8", "#D8F5D0", "#DCE4FF", "#FFF3B0", "#E4D4FF", "#C9F2EC"];
+
   function defaultPet() {
     return {
       name: "Blob",
+      nameSet: false,
+      color: PET_COLORS[0],
       hunger: 100,
       hygiene: 100,
       happiness: 100,
@@ -281,9 +285,28 @@ const Backend = (() => {
     return { success: true };
   }
 
+  async function addHygiene(amount) {
+    if (!playerData || amount <= 0) return;
+    playerData.pet.hygiene = Math.min(MAX_STAT, playerData.pet.hygiene + amount);
+    await persist();
+  }
+
   async function cleanPet() {
+    await addHygiene(CLEAN_GAIN);
+  }
+
+  async function setPetName(name) {
     if (!playerData) return;
-    playerData.pet.hygiene = Math.min(MAX_STAT, playerData.pet.hygiene + CLEAN_GAIN);
+    const trimmed = (name || "").trim().slice(0, 16);
+    if (!trimmed) return;
+    playerData.pet.name = trimmed;
+    playerData.pet.nameSet = true;
+    await persist();
+  }
+
+  async function setPetColor(hex) {
+    if (!playerData) return;
+    playerData.pet.color = hex;
     await persist();
   }
 
@@ -336,14 +359,18 @@ const Backend = (() => {
     onPlayerDataChange,
     FOOD_CATALOG,
     ACCESSORY_CATALOG,
+    PET_COLORS,
     applyPetDecay,
     getPetMood,
     spendHearts,
     feedPet,
     cleanPet,
+    addHygiene,
     applyPlayResult,
     buyFood,
     buyAccessory,
-    equipAccessory
+    equipAccessory,
+    setPetName,
+    setPetColor
   };
 })();

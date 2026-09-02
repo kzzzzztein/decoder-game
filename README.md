@@ -134,25 +134,33 @@ either way.
 A kawaii blob companion lives on its own screen (tap "Visit your pet" on
 the home screen). It's a real Tamagotchi-style system:
 
+- **Naming & color** — the first time you visit, it asks you to name your
+  blob and pick its color from 6 swatches. Tap the pencil icon next to its
+  name anytime to change either later.
 - **3 stats** — Hunger, Hygiene, Happiness (0–100), each decaying by 2
   points per real hour since you last checked in. Neglect it and its
   face changes: happy → neutral → sad → sick, with a little idle
   breathing animation that changes pace with mood.
-- **Feed** — costs a food item from your inventory (bought in the shop).
-  Berries are cheap and restore a little; Feasts cost more and restore a
-  lot.
-- **Brush** — free, instantly restores hygiene.
+- **Touch it** — tapping the blob directly makes it squish and pop off a
+  little burst of sparkles, just for fun (no stat effect — it's purely a
+  "you're here, I noticed" reaction).
+- **Brush it** — tapping Brush puts a sponge under your finger. Drag it
+  across the blob's body and hygiene rises in real time while it wiggles
+  happily; tap Done when you're finished.
+- **Feed it** — pick a food from your inventory (bought in the shop), then
+  drag it onto the blob's body. It leans in as you get close, then does a
+  little chomp animation and the food disappears when you release on
+  target. Missing the blob just cancels the feed, no food wasted.
 - **Play** — opens a 20-second "Catch the Hearts" mini-game. Your score
   converts into happiness gained and a small hearts bonus.
 - **Shop** — spend hearts on food (consumable) or accessories (permanent,
   equip/unequip anytime — bow tie, party hat, sunglasses, scarf so far).
 
 This is intentionally v1 of a "deep" system: 3 stats, 3 foods, 4
-accessories, 1 mini-game. Everything is catalog-driven in `backend.js`
-(`FOOD_CATALOG`, `ACCESSORY_CATALOG`) and `pet.js` (`FACES`,
-`ACCESSORY_SVG`), so adding a new food, a new outfit, or a second
-mini-game doesn't require restructuring anything — just add an entry and
-(for accessories) an SVG snippet for how it sits on the blob.
+accessories, 1 mini-game, 6 colors. Everything is catalog-driven in
+`backend.js` (`FOOD_CATALOG`, `ACCESSORY_CATALOG`, `PET_COLORS`) and
+`pet.js` (`FACES`, `ACCESSORY_SVG`), so adding a new food, outfit, color,
+or a second mini-game doesn't require restructuring anything.
 
 ## 6. How the puzzle mechanic works
 
