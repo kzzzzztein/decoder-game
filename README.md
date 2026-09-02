@@ -10,7 +10,7 @@ Solving puzzles earns **hearts** (the in-game currency), there's a **daily
 reward** with a streak bonus, and progress can sync to an account via
 Firebase — or just run entirely on-device with zero setup.
 
-**5 categories, 18 puzzles each right now (90 total)** — working toward 50
+**7 categories, 10–18 puzzles each right now (110 total)** — working toward 50
 each (250 total). The data file is built so more can be appended without
 touching any game code. See "Adding more puzzles" below.
 

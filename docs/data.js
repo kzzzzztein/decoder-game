@@ -915,8 +915,7 @@ const PUZZLE_DATA = {
         { q: "To sense something inside you.", a: "FEEL" },
         { q: "Hurting, physically or emotionally.", a: "PAIN" }
       ]
-    },
-    {
+    },    {
       id: "music_02",
       source: "Freddie Mercury, Queen",
       quote: "I WON'T BE A ROCK STAR I WILL BE A LEGEND",
@@ -1120,6 +1119,252 @@ const PUZZLE_DATA = {
         { q: "Related to Greece.", a: "GREEK" }
       ]
     }
+  ],
+
+  marvel: [
+    {
+      id: "marvel_01",
+      source: "The Avengers (2012)",
+      quote: "THAT'S MY SECRET CAPTAIN I'M ALWAYS ANGRY",
+      questions: [
+        { q: "Belonging to me.", a: "MY" },
+        { q: "Something kept hidden from others.", a: "SECRET" },
+        { q: "The leader of a team, or a super soldier's title.", a: "CAPTAIN" },
+        { q: "Every single time, no exceptions.", a: "ALWAYS" },
+        { q: "Feeling really mad.", a: "ANGRY" }
+      ]
+    },
+    {
+      id: "marvel_02",
+      source: "Avengers: Infinity War (2018)",
+      quote: "FINE I'LL DO IT MYSELF",
+      questions: [
+        { q: "Okay, acceptable.", a: "FINE" },
+        { q: "Short way to say 'I will'.", a: "I'LL" },
+        { q: "To perform an action.", a: "DO" },
+        { q: "A word for a thing already mentioned.", a: "IT" },
+        { q: "Me, and nobody else.", a: "MYSELF" }
+      ]
+    },
+    {
+      id: "marvel_03",
+      source: "Captain America: Civil War (2016)",
+      quote: "I CAN DO THIS ALL DAY",
+      questions: [
+        { q: "To be able to.", a: "CAN" },
+        { q: "To perform an action.", a: "DO" },
+        { q: "A word pointing to something close by.", a: "THIS" },
+        { q: "Every single one.", a: "ALL" },
+        { q: "24 hours, from morning to night.", a: "DAY" }
+      ]
+    },
+    {
+      id: "marvel_04",
+      source: "Avengers: Infinity War (2018)",
+      quote: "IN MY CULTURE DEATH IS NOT THE END",
+      questions: [
+        { q: "The traditions and beliefs of a group of people.", a: "CULTURE" },
+        { q: "When life ends.", a: "DEATH" },
+        { q: "A word used to say no.", a: "NOT" },
+        { q: "A small word before a noun.", a: "THE" },
+        { q: "The finish, or the last part.", a: "END" }
+      ]
+    },
+    {
+      id: "marvel_05",
+      source: "Spider-Man: Into the Spider-Verse (2018)",
+      quote: "ANYONE CAN WEAR THE MASK",
+      questions: [
+        { q: "Any person at all.", a: "ANYONE" },
+        { q: "To be able to.", a: "CAN" },
+        { q: "To put clothes on your body.", a: "WEAR" },
+        { q: "A small word before a noun.", a: "THE" },
+        { q: "A covering for your face.", a: "MASK" }
+      ]
+    },
+    {
+      id: "marvel_06",
+      source: "Thor: Ragnarok (2017)",
+      quote: "HE'S A FRIEND FROM WORK",
+      questions: [
+        { q: "Short way to say 'he is'.", a: "HE'S" },
+        { q: "A small word before a noun.", a: "A" },
+        { q: "Someone you like and trust.", a: "FRIEND" },
+        { q: "Starting at, or originating at.", a: "FROM" },
+        { q: "A job, or the place you do a job.", a: "WORK" }
+      ]
+    },
+    {
+      id: "marvel_07",
+      source: "Avengers: Infinity War (2018)",
+      quote: "WE'RE IN THE ENDGAME NOW",
+      questions: [
+        { q: "Short way to say 'we are'.", a: "WE'RE" },
+        { q: "Inside, not outside.", a: "IN" },
+        { q: "A small word before a noun.", a: "THE" },
+        { q: "The final stage of a plan.", a: "ENDGAME" },
+        { q: "At this moment, not later.", a: "NOW" }
+      ]
+    },
+    {
+      id: "marvel_08",
+      source: "Amazing Fantasy #15 (Spider-Man's origin)",
+      quote: "WITH GREAT POWER COMES GREAT RESPONSIBILITY",
+      questions: [
+        { q: "Together with, alongside.", a: "WITH" },
+        { q: "Very good, or very large.", a: "GREAT" },
+        { q: "Strength or the ability to control things.", a: "POWER" },
+        { q: "Arrives, or follows after.", a: "COMES" },
+        { q: "A duty you're in charge of.", a: "RESPONSIBILITY" }
+      ]
+    },
+    {
+      id: "marvel_09",
+      source: "X-Men (2000)",
+      quote: "MUTATION IT IS THE KEY TO OUR EVOLUTION",
+      questions: [
+        { q: "A change in genes that can create new traits.", a: "MUTATION" },
+        { q: "A word for a thing already mentioned.", a: "IT" },
+        { q: "The metal tool that opens locks, or something very important.", a: "KEY" },
+        { q: "Belonging to us.", a: "OUR" },
+        { q: "The gradual change of living things over time.", a: "EVOLUTION" }
+      ]
+    },
+    {
+      id: "marvel_10",
+      source: "Avengers: Endgame (2019)",
+      quote: "AND I AM IRON MAN",
+      questions: [
+        { q: "A word that joins two things together.", a: "AND" },
+        { q: "A word for the speaker.", a: "I" },
+        { q: "The word for 'to be', used with 'I'.", a: "AM" },
+        { q: "A strong gray metal.", a: "IRON" },
+        { q: "An adult male person.", a: "MAN" }
+      ]
+    }
+  ],
+
+  games: [
+    {
+      id: "games_01",
+      source: "Game Fact File — Persona 5",
+      quote: "JOKER IS THE CODENAME OF THE PHANTOM THIEVES LEADER",
+      questions: [
+        { q: "A playing card, and this hero's alias in Persona 5.", a: "JOKER" },
+        { q: "A secret nickname used instead of a real name.", a: "CODENAME" },
+        { q: "A ghost, or something that seems to vanish and reappear.", a: "PHANTOM" },
+        { q: "People who steal things.", a: "THIEVES" },
+        { q: "The person in charge of a group.", a: "LEADER" }
+      ]
+    },
+    {
+      id: "games_02",
+      source: "Game Fact File — Super Mario",
+      quote: "MARIO IS A PLUMBER WHO WEARS A RED HAT",
+      questions: [
+        { q: "The mustached hero of a famous video game series.", a: "MARIO" },
+        { q: "Someone who fixes pipes and sinks for a job.", a: "PLUMBER" },
+        { q: "Puts clothes on their body.", a: "WEARS" },
+        { q: "The color of a stop sign.", a: "RED" },
+        { q: "A piece of clothing worn on your head.", a: "HAT" }
+      ]
+    },
+    {
+      id: "games_03",
+      source: "Game Fact File — Devil May Cry",
+      quote: "DANTE IS A DEMON HUNTER WITH A GIANT SWORD",
+      questions: [
+        { q: "The stylish demon-slaying hero of Devil May Cry.", a: "DANTE" },
+        { q: "An evil supernatural creature.", a: "DEMON" },
+        { q: "Someone who tracks down and catches things.", a: "HUNTER" },
+        { q: "Really, really big.", a: "GIANT" },
+        { q: "A long bladed weapon.", a: "SWORD" }
+      ]
+    },
+    {
+      id: "games_04",
+      source: "Game Fact File — Grand Theft Auto",
+      quote: "GRAND THEFT AUTO IS SET IN OPEN WORLD CITIES",
+      questions: [
+        { q: "Impressively large or important.", a: "GRAND" },
+        { q: "The act of stealing.", a: "THEFT" },
+        { q: "Not closed, free to explore.", a: "OPEN" },
+        { q: "The whole planet, or a game's whole map.", a: "WORLD" },
+        { q: "Large towns full of buildings and people.", a: "CITIES" }
+      ]
+    },
+    {
+      id: "games_05",
+      source: "Game Fact File — Five Nights at Freddy's",
+      quote: "FREDDY IS AN ANIMATRONIC BEAR WHO COMES ALIVE AT NIGHT",
+      questions: [
+        { q: "The bear mascot and namesake of a horror pizzeria game.", a: "FREDDY" },
+        { q: "A robotic figure built to move like it's alive.", a: "ANIMATRONIC" },
+        { q: "A big furry forest animal.", a: "BEAR" },
+        { q: "Living, not turned off or gone.", a: "ALIVE" },
+        { q: "The dark hours between evening and morning.", a: "NIGHT" }
+      ]
+    },
+    {
+      id: "games_06",
+      source: "Game Fact File — The Legend of Zelda",
+      quote: "LINK MUST RESCUE PRINCESS ZELDA FROM AN EVIL WIZARD",
+      questions: [
+        { q: "The green-clad hero of a famous adventure game series.", a: "LINK" },
+        { q: "To save someone from danger.", a: "RESCUE" },
+        { q: "The princess this game series is named after.", a: "ZELDA" },
+        { q: "Very bad, wicked.", a: "EVIL" },
+        { q: "A person who uses magic.", a: "WIZARD" }
+      ]
+    },
+    {
+      id: "games_07",
+      source: "Game Fact File — Sonic the Hedgehog",
+      quote: "SONIC IS A BLUE HEDGEHOG WHO RUNS SUPER FAST",
+      questions: [
+        { q: "The speedy blue video game mascot.", a: "SONIC" },
+        { q: "The color of a clear sky.", a: "BLUE" },
+        { q: "A small spiky-backed animal.", a: "HEDGEHOG" },
+        { q: "Moves quickly on foot.", a: "RUNS" },
+        { q: "Moving at high speed.", a: "FAST" }
+      ]
+    },
+    {
+      id: "games_08",
+      source: "Game Fact File — Pokémon",
+      quote: "TRAINERS CATCH AND BATTLE CREATURES CALLED POKEMON",
+      questions: [
+        { q: "People who raise and command these creatures.", a: "TRAINERS" },
+        { q: "To grab hold of something.", a: "CATCH" },
+        { q: "A fight or contest between two sides.", a: "BATTLE" },
+        { q: "Living beings, especially unusual or fantastical ones.", a: "CREATURES" },
+        { q: "The pocket monsters players collect and train.", a: "POKEMON" }
+      ]
+    },
+    {
+      id: "games_09",
+      source: "Game Fact File — Minecraft",
+      quote: "PLAYERS MINE BLOCKS TO BUILD ANYTHING THEY IMAGINE",
+      questions: [
+        { q: "People who play a game.", a: "PLAYERS" },
+        { q: "To dig materials out of the ground.", a: "MINE" },
+        { q: "Square-shaped building pieces.", a: "BLOCKS" },
+        { q: "To construct something.", a: "BUILD" },
+        { q: "To picture something in your mind.", a: "IMAGINE" }
+      ]
+    },
+    {
+      id: "games_10",
+      source: "Game Fact File — Persona 5",
+      quote: "PERSONA FIVE FOLLOWS A GROUP OF STUDENTS BY NIGHT",
+      questions: [
+        { q: "A mask-wearing alter-ego summoned in this game's battles.", a: "PERSONA" },
+        { q: "Comes after, or tells the story of.", a: "FOLLOWS" },
+        { q: "A bunch of people together.", a: "GROUP" },
+        { q: "People who attend school.", a: "STUDENTS" },
+        { q: "The dark hours between evening and morning.", a: "NIGHT" }
+      ]
+    }
   ]
 };
 
@@ -1138,5 +1383,7 @@ const CATEGORY_META = {
   series:  { label: "Series",  icon: "📺", color: "#F0709A" },
   history: { label: "History", icon: "🏛️", color: "#D9668F" },
   animals: { label: "Animals", icon: "🐾", color: "#EE7CA6" },
-  music:   { label: "Music",   icon: "🎵", color: "#E4507E" }
+  music:   { label: "Music",   icon: "🎵", color: "#E4507E" },
+  marvel:  { label: "Marvel",  icon: "🦸", color: "#C23570" },
+  games:   { label: "Games",   icon: "🎮", color: "#B4569E" }
 };

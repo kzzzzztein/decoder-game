@@ -32,9 +32,17 @@ const Backend = (() => {
   const listeners = [];
 
   function defaultPlayerData() {
+    // Builds the solved-categories map from whatever categories exist in
+    // PUZZLE_DATA (data.js loads before this is ever called), so adding a
+    // new category there never requires touching backend.js.
+    const categories = (typeof PUZZLE_DATA !== "undefined")
+      ? Object.keys(PUZZLE_DATA)
+      : ["movies", "series", "history", "animals", "music"]; // fallback
+    const solved = {};
+    categories.forEach(cat => { solved[cat] = []; });
     return {
       hearts: 0,
-      solved: { movies: [], series: [], history: [], animals: [], music: [] },
+      solved,
       lastDailyClaim: null,
       streak: 0
     };
