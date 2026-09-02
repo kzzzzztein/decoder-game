@@ -88,7 +88,7 @@ function renderHome() {
   Object.keys(PUZZLE_DATA).forEach(catKey => {
     const meta = CATEGORY_META[catKey];
     const puzzles = PUZZLE_DATA[catKey];
-    const solvedCount = (loadProgress()[catKey] || []).length;
+    const solvedCount = (Backend.getPlayerData().solved[catKey] || []).length;
     const pct = puzzles.length ? Math.round((solvedCount / puzzles.length) * 100) : 0;
 
     const tile = document.createElement("button");
