@@ -7,14 +7,19 @@ every other instance of that letter, so solving one box instantly reveals
 every matching box across the whole puzzle.
 
 Solving puzzles earns **hearts** (the in-game currency), there's a **daily
-reward** with a streak bonus, and progress can sync to an account via
-Firebase — or just run entirely on-device with zero setup.
+reward** with a streak bonus and a flying-hearts claim animation, and
+progress can sync to an account via Firebase — or just run entirely
+on-device with zero setup.
 
-**7 categories, 10–18 puzzles each right now (110 total)** — working toward 50
-each (250 total). The data file is built so more can be appended without
-touching any game code. See "Adding more puzzles" below.
+**7 categories, 17–25 puzzles each right now (159 total)** — working
+toward 50 each (350 total). The data file is built so more can be
+appended without touching any game code. See "Adding more puzzles" below.
 
-No ads, no accounts, no backend. It's a single static site — 4 files.
+Categories are picked from a swipeable horizontal carousel (not a list) —
+built for one-thumb phone use. There's no intro/developer-note screen
+anymore either — it opens straight into the app.
+
+No ads, no accounts required, packaged as a native Android app.
 
 ---
 
@@ -31,26 +36,7 @@ python3 -m http.server 8080
 
 ---
 
-## 2. Deploy free on GitHub Pages
-
-1. This zip already matches your existing `decoder-game` repo's structure —
-   just extract it and copy everything over your current repo folder on
-   disk (overwrite when asked), replacing the old `www` folder with the
-   new `docs` folder.
-2. In GitHub Desktop: it'll show all the changed/added/removed files.
-   Write a commit message like "Move web files to docs folder" and commit
-   to `main`, then push.
-3. In your repo on GitHub.com: **Settings → Pages → Build and deployment →
-   Source** → confirm it's `Deploy from a branch`, branch `main`, folder
-   `/docs`. Save if you change anything.
-4. After a minute, your game is live at:
-   `https://kzzzzztein.github.io/decoder-game/`
-
-That link works on any phone browser already — you can share it directly.
-
----
-
-## 3. Turn it into a real Android APK
+## 2. Turn it into a real Android APK
 
 The easiest path is **Capacitor**, which wraps a web app into a native
 Android project you build in Android Studio.
@@ -77,7 +63,7 @@ version.
 
 ---
 
-## 4. Accounts, hearts, and daily rewards
+## 3. Accounts, hearts, and daily rewards
 
 The game now has a small progression economy:
 
@@ -129,7 +115,7 @@ either way.
    Firebase errors, it's connected. Progress will now appear as a document
    under `players/<some-id>` in the Firestore console.
 
-## 5. Your pet (v1)
+## 4. Your pet (v1)
 
 A kawaii blob companion lives on its own screen (tap "Visit your pet" on
 the home screen). It's a real Tamagotchi-style system:
@@ -162,7 +148,7 @@ accessories, 1 mini-game, 6 colors. Everything is catalog-driven in
 `pet.js` (`FACES`, `ACCESSORY_SVG`), so adding a new food, outfit, color,
 or a second mini-game doesn't require restructuring anything.
 
-## 6. How the puzzle mechanic works
+## 5. How the puzzle mechanic works
 
 - `data.js` holds every puzzle as `{ id, source, quote, questions }`.
 - `questions` is always an array of exactly 5 `{ q, a }` pairs — `a` must be
@@ -184,7 +170,7 @@ or a second mini-game doesn't require restructuring anything.
   quote and its source reveal, progress saves to the phone's local
   storage, and a star rating pops up (3 stars for zero mistakes).
 
-## 7. Adding more puzzles (scaling up to 50 per category)
+## 6. Adding more puzzles (scaling up to 50 per category)
 
 Just append more objects to the right array in `data.js`:
 
@@ -218,7 +204,7 @@ private one — copyright holders can and do issue takedowns on exactly this
 kind of use. Sticking to spoken quotes and music trivia keeps the category
 totally safe.
 
-## 8. File structure
+## 7. File structure
 
 ```
 decoder-game/

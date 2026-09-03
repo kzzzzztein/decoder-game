@@ -243,6 +243,90 @@ const PUZZLE_DATA = {
         { q: "Belonging to me.", a: "MY" },
         { q: "A tall shoe that covers your ankle.", a: "BOOT" }
       ]
+    },
+    {
+      id: "movies_19",
+      source: "The Princess Bride (1987)",
+      quote: "MY NAME IS INIGO MONTOYA YOU KILLED MY FATHER PREPARE TO DIE",
+      questions: [
+        { q: "What people call you.", a: "NAME" },
+        { q: "The first name of the famous swordsman in this movie.", a: "INIGO" },
+        { q: "The swordsman's last name.", a: "MONTOYA" },
+        { q: "Caused someone to die.", a: "KILLED" },
+        { q: "To get ready for something.", a: "PREPARE" }
+      ]
+    },
+    {
+      id: "movies_20",
+      source: "Ghostbusters (1984)",
+      quote: "I AIN'T AFRAID OF NO GHOST",
+      questions: [
+        { q: "Casual way to say 'am not'.", a: "AIN'T" },
+        { q: "Feeling scared.", a: "AFRAID" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "The opposite of yes.", a: "NO" },
+        { q: "A spooky spirit that haunts places.", a: "GHOST" }
+      ]
+    },
+    {
+      id: "movies_21",
+      source: "Frozen (2013)",
+      quote: "SOME PEOPLE ARE WORTH MELTING FOR",
+      questions: [
+        { q: "An amount that isn't all or none.", a: "SOME" },
+        { q: "Human beings.", a: "PEOPLE" },
+        { q: "Deserving or valuable enough.", a: "WORTH" },
+        { q: "Turning from solid to liquid with heat.", a: "MELTING" },
+        { q: "Intended for, meant for.", a: "FOR" }
+      ]
+    },
+    {
+      id: "movies_22",
+      source: "Jurassic Park (1993)",
+      quote: "AN ADVENTURE SEVENTY MILLION YEARS IN THE MAKING",
+      questions: [
+        { q: "An exciting journey or experience.", a: "ADVENTURE" },
+        { q: "The number 70.", a: "SEVENTY" },
+        { q: "A thousand thousand — 1,000,000.", a: "MILLION" },
+        { q: "Long stretches of time, 365 days each.", a: "YEARS" },
+        { q: "Creating something.", a: "MAKING" }
+      ]
+    },
+    {
+      id: "movies_23",
+      source: "Home Alone (1990)",
+      quote: "KEEP THE CHANGE YOU FILTHY ANIMAL",
+      questions: [
+        { q: "To hold onto something.", a: "KEEP" },
+        { q: "Money given back, or to make something different.", a: "CHANGE" },
+        { q: "The person someone is talking to.", a: "YOU" },
+        { q: "Extremely dirty.", a: "FILTHY" },
+        { q: "A living creature, like a dog or bird.", a: "ANIMAL" }
+      ]
+    },
+    {
+      id: "movies_24",
+      source: "The Lion King (1994)",
+      quote: "EVERYTHING YOU SEE EXISTS TOGETHER IN A DELICATE BALANCE",
+      questions: [
+        { q: "All things, without exception.", a: "EVERYTHING" },
+        { q: "To look at with your eyes.", a: "SEE" },
+        { q: "Is real, or is present.", a: "EXISTS" },
+        { q: "Easily broken, needing careful handling.", a: "DELICATE" },
+        { q: "A stable, even state between things.", a: "BALANCE" }
+      ]
+    },
+    {
+      id: "movies_25",
+      source: "Shrek (2001)",
+      quote: "ONIONS HAVE LAYERS OGRES HAVE LAYERS YOU GET IT",
+      questions: [
+        { q: "A strong-smelling vegetable that makes you cry when cut.", a: "ONIONS" },
+        { q: "Levels stacked one on top of another.", a: "LAYERS" },
+        { q: "Big, ugly, grumpy monster-like creatures.", a: "OGRES" },
+        { q: "To understand, or to receive.", a: "GET" },
+        { q: "A word for a thing already mentioned.", a: "IT" }
+      ]
     }
   ],
 
@@ -461,6 +545,90 @@ const PUZZLE_DATA = {
         { q: "A group of people born around the same time.", a: "GENERATION" },
         { q: "Someone who defeats monsters.", a: "SLAYER" },
         { q: "Coming into life.", a: "BORN" }
+      ]
+    },
+    {
+      id: "series_19",
+      source: "Supernatural",
+      quote: "SAVING PEOPLE HUNTING THINGS THE FAMILY BUSINESS",
+      questions: [
+        { q: "Rescuing, keeping safe.", a: "SAVING" },
+        { q: "Searching for and chasing something.", a: "HUNTING" },
+        { q: "Objects, or items.", a: "THINGS" },
+        { q: "The people related to you, like parents and siblings.", a: "FAMILY" },
+        { q: "Work, or a company; also means 'none of your ___'.", a: "BUSINESS" }
+      ]
+    },
+    {
+      id: "series_20",
+      source: "I Love Lucy",
+      quote: "LUCY YOU HAVE SOME SPLAINING TO DO",
+      questions: [
+        { q: "The first name of the main character in this classic sitcom.", a: "LUCY" },
+        { q: "To own or hold.", a: "HAVE" },
+        { q: "An amount that isn't all or none.", a: "SOME" },
+        { q: "A playful short way to say 'explaining'.", a: "SPLAINING" },
+        { q: "To perform an action.", a: "DO" }
+      ]
+    },
+    {
+      id: "series_21",
+      source: "The Simpsons",
+      quote: "TO ALCOHOL THE CAUSE OF AND SOLUTION TO ALL OF LIFE'S PROBLEMS",
+      questions: [
+        { q: "A drink like beer or wine that can make you tipsy.", a: "ALCOHOL" },
+        { q: "The reason something happens.", a: "CAUSE" },
+        { q: "An answer to a problem.", a: "SOLUTION" },
+        { q: "Difficulties or issues.", a: "PROBLEMS" },
+        { q: "Belonging to life.", a: "LIFE'S" }
+      ]
+    },
+    {
+      id: "series_22",
+      source: "Rick and Morty",
+      quote: "NOBODY EXISTS ON PURPOSE NOBODY BELONGS ANYWHERE",
+      questions: [
+        { q: "Is real, or is present.", a: "EXISTS" },
+        { q: "The reason something is done.", a: "PURPOSE" },
+        { q: "Has a proper or rightful place.", a: "BELONGS" },
+        { q: "Any place at all.", a: "ANYWHERE" },
+        { q: "Not a single person.", a: "NOBODY" }
+      ]
+    },
+    {
+      id: "series_23",
+      source: "Avatar: The Last Airbender",
+      quote: "LIFE HAPPENS WHEREVER YOU ARE WHETHER YOU MAKE IT OR NOT",
+      questions: [
+        { q: "Takes place, occurs.", a: "HAPPENS" },
+        { q: "In any place that.", a: "WHEREVER" },
+        { q: "A word used when there are two choices.", a: "WHETHER" },
+        { q: "To create or cause.", a: "MAKE" },
+        { q: "A word used to say no.", a: "NOT" }
+      ]
+    },
+    {
+      id: "series_24",
+      source: "The Good Place",
+      quote: "THIS IS THE BAD PLACE",
+      questions: [
+        { q: "A word pointing to something close by.", a: "THIS" },
+        { q: "A word meaning 'exists'.", a: "IS" },
+        { q: "A small word before a noun.", a: "THE" },
+        { q: "Not good.", a: "BAD" },
+        { q: "A spot or location.", a: "PLACE" }
+      ]
+    },
+    {
+      id: "series_25",
+      source: "Doctor Who",
+      quote: "FEAR MAKES COMPANIONS OF US ALL",
+      questions: [
+        { q: "Feeling scared.", a: "FEAR" },
+        { q: "Creates or causes.", a: "MAKES" },
+        { q: "Friends who travel or spend time with you.", a: "COMPANIONS" },
+        { q: "A word for the speaker and others together.", a: "US" },
+        { q: "Every single one.", a: "ALL" }
       ]
     }
   ],
@@ -681,6 +849,90 @@ const PUZZLE_DATA = {
         { q: "To sense something inside you.", a: "FEEL" },
         { q: "To create or cause.", a: "MAKE" }
       ]
+    },
+    {
+      id: "history_19",
+      source: "Julius Caesar",
+      quote: "THE DIE HAS BEEN CAST",
+      questions: [
+        { q: "A small word before a noun.", a: "THE" },
+        { q: "A small cube used in games, or to stop living.", a: "DIE" },
+        { q: "Owns or holds.", a: "HAS" },
+        { q: "Past participle of 'be'.", a: "BEEN" },
+        { q: "Thrown, or a group of actors.", a: "CAST" }
+      ]
+    },
+    {
+      id: "history_20",
+      source: "Napoleon Bonaparte",
+      quote: "ABLE WAS I ERE I SAW ELBA",
+      questions: [
+        { q: "Capable of doing something.", a: "ABLE" },
+        { q: "The past form of 'is'.", a: "WAS" },
+        { q: "An old-fashioned word meaning 'before'.", a: "ERE" },
+        { q: "The past form of 'see'.", a: "SAW" },
+        { q: "The island Napoleon was exiled to.", a: "ELBA" }
+      ]
+    },
+    {
+      id: "history_21",
+      source: "Sun Tzu, The Art of War",
+      quote: "KNOW YOUR ENEMY AND KNOW YOURSELF",
+      questions: [
+        { q: "To understand or be aware of.", a: "KNOW" },
+        { q: "Belonging to you.", a: "YOUR" },
+        { q: "Someone who opposes or fights against you.", a: "ENEMY" },
+        { q: "A word that joins two things together.", a: "AND" },
+        { q: "You, and nobody else.", a: "YOURSELF" }
+      ]
+    },
+    {
+      id: "history_22",
+      source: "Marie Curie",
+      quote: "NOTHING IN LIFE IS TO BE FEARED IT IS ONLY TO BE UNDERSTOOD",
+      questions: [
+        { q: "Not a single thing.", a: "NOTHING" },
+        { q: "Being alive.", a: "LIFE" },
+        { q: "Was afraid of.", a: "FEARED" },
+        { q: "Just, solely.", a: "ONLY" },
+        { q: "Grasped the meaning of something.", a: "UNDERSTOOD" }
+      ]
+    },
+    {
+      id: "history_23",
+      source: "Albert Einstein",
+      quote: "IMAGINATION IS MORE IMPORTANT THAN KNOWLEDGE",
+      questions: [
+        { q: "The ability to picture things in your mind.", a: "IMAGINATION" },
+        { q: "A greater amount.", a: "MORE" },
+        { q: "Mattering a lot.", a: "IMPORTANT" },
+        { q: "Used to compare two things.", a: "THAN" },
+        { q: "Information and understanding gained through learning.", a: "KNOWLEDGE" }
+      ]
+    },
+    {
+      id: "history_24",
+      source: "Harriet Tubman",
+      quote: "EVERY GREAT DREAM BEGINS WITH A DREAMER",
+      questions: [
+        { q: "Each one, without exception.", a: "EVERY" },
+        { q: "Very good, or very large.", a: "GREAT" },
+        { q: "Starts.", a: "BEGINS" },
+        { q: "Together, alongside.", a: "WITH" },
+        { q: "Someone who imagines big hopes for the future.", a: "DREAMER" }
+      ]
+    },
+    {
+      id: "history_25",
+      source: "Booker T. Washington",
+      quote: "SUCCESS IS TO BE MEASURED NOT SO MUCH BY THE POSITION ONE HAS REACHED",
+      questions: [
+        { q: "Achieving your goals.", a: "SUCCESS" },
+        { q: "Judged or evaluated.", a: "MEASURED" },
+        { q: "A large amount.", a: "MUCH" },
+        { q: "A place or rank someone holds.", a: "POSITION" },
+        { q: "Arrived at, or got to.", a: "REACHED" }
+      ]
     }
   ],
 
@@ -900,6 +1152,90 @@ const PUZZLE_DATA = {
         { q: "Having to do with people.", a: "HUMAN" },
         { q: "The tiny pattern on the tip of your finger.", a: "FINGERPRINT" }
       ]
+    },
+    {
+      id: "animals_19",
+      source: "Animal Fact File",
+      quote: "A HUMMINGBIRD CAN FLY BACKWARDS",
+      questions: [
+        { q: "A small word before a noun.", a: "A" },
+        { q: "A tiny, fast-flying bird known for hovering.", a: "HUMMINGBIRD" },
+        { q: "To be able to.", a: "CAN" },
+        { q: "To move through the air.", a: "FLY" },
+        { q: "In the reverse direction.", a: "BACKWARDS" }
+      ]
+    },
+    {
+      id: "animals_20",
+      source: "Animal Fact File",
+      quote: "A GROUP OF JELLYFISH IS CALLED A SMACK",
+      questions: [
+        { q: "A bunch of things together.", a: "GROUP" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "A soft, see-through sea creature that can sting.", a: "JELLYFISH" },
+        { q: "Given this name.", a: "CALLED" },
+        { q: "The funny name for a group of jellyfish.", a: "SMACK" }
+      ]
+    },
+    {
+      id: "animals_21",
+      source: "Animal Fact File",
+      quote: "SLOTHS ONLY POOP ONCE A WEEK",
+      questions: [
+        { q: "Very slow-moving animals that hang from trees.", a: "SLOTHS" },
+        { q: "Just, solely.", a: "ONLY" },
+        { q: "Waste that comes out of the body.", a: "POOP" },
+        { q: "One single time.", a: "ONCE" },
+        { q: "Seven days.", a: "WEEK" }
+      ]
+    },
+    {
+      id: "animals_22",
+      source: "Animal Fact File",
+      quote: "A BABY KANGAROO IS CALLED A JOEY",
+      questions: [
+        { q: "A very young animal or person.", a: "BABY" },
+        { q: "A hopping animal from Australia.", a: "KANGAROO" },
+        { q: "Given this name.", a: "CALLED" },
+        { q: "The cute name for a baby kangaroo.", a: "JOEY" },
+        { q: "A small word before a noun.", a: "A" }
+      ]
+    },
+    {
+      id: "animals_23",
+      source: "Animal Fact File",
+      quote: "TIGERS HAVE STRIPED SKIN NOT JUST STRIPED FUR",
+      questions: [
+        { q: "Big orange and black striped cats.", a: "TIGERS" },
+        { q: "The outer layer covering your body.", a: "SKIN" },
+        { q: "A word used to say no.", a: "NOT" },
+        { q: "Only, simply.", a: "JUST" },
+        { q: "The soft hair covering many animals.", a: "FUR" }
+      ]
+    },
+    {
+      id: "animals_24",
+      source: "Animal Fact File",
+      quote: "A GROUP OF PORCUPINES IS CALLED A PRICKLE",
+      questions: [
+        { q: "A bunch of things together.", a: "GROUP" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "Spiky animals covered in sharp quills.", a: "PORCUPINES" },
+        { q: "Given this name.", a: "CALLED" },
+        { q: "The pointy name for a group of porcupines.", a: "PRICKLE" }
+      ]
+    },
+    {
+      id: "animals_25",
+      source: "Animal Fact File",
+      quote: "DOLPHINS SLEEP WITH ONE EYE OPEN",
+      questions: [
+        { q: "Smart, playful sea mammals known for clicking sounds.", a: "DOLPHINS" },
+        { q: "To rest with your eyes closed.", a: "SLEEP" },
+        { q: "The number 1.", a: "ONE" },
+        { q: "The part of your face you see with.", a: "EYE" },
+        { q: "Not closed.", a: "OPEN" }
+      ]
     }
   ],
 
@@ -1118,6 +1454,90 @@ const PUZZLE_DATA = {
         { q: "Extremely old, from a long time ago.", a: "ANCIENT" },
         { q: "Related to Greece.", a: "GREEK" }
       ]
+    },
+    {
+      id: "music_19",
+      source: "Music Fact File",
+      quote: "A CHOIR IS A GROUP OF SINGERS PERFORMING TOGETHER",
+      questions: [
+        { q: "A group that sings together, often in a church or school.", a: "CHOIR" },
+        { q: "A bunch of things together.", a: "GROUP" },
+        { q: "People who use their voice to make music.", a: "SINGERS" },
+        { q: "Presenting a show for an audience.", a: "PERFORMING" },
+        { q: "With others, as a group.", a: "TOGETHER" }
+      ]
+    },
+    {
+      id: "music_20",
+      source: "Ella Fitzgerald, in interview",
+      quote: "THE ONLY THING BETTER THAN SINGING IS MORE SINGING",
+      questions: [
+        { q: "Just, solely.", a: "ONLY" },
+        { q: "An object, or something you don't need to name.", a: "THING" },
+        { q: "More good than something else.", a: "BETTER" },
+        { q: "Used to compare two things.", a: "THAN" },
+        { q: "Using your voice to make music.", a: "SINGING" }
+      ]
+    },
+    {
+      id: "music_21",
+      source: "Music Fact File",
+      quote: "A TRIO IS A GROUP OF THREE MUSICIANS",
+      questions: [
+        { q: "A group made of exactly three.", a: "TRIO" },
+        { q: "A bunch of things together.", a: "GROUP" },
+        { q: "The number after two.", a: "THREE" },
+        { q: "People who play instruments or sing.", a: "MUSICIANS" },
+        { q: "Belonging to, or made from.", a: "OF" }
+      ]
+    },
+    {
+      id: "music_22",
+      source: "Music Fact File",
+      quote: "THE SAXOPHONE WAS INVENTED IN THE EIGHTEEN FORTIES",
+      questions: [
+        { q: "A curvy brass-like instrument common in jazz.", a: "SAXOPHONE" },
+        { q: "The past form of 'is'.", a: "WAS" },
+        { q: "Created for the first time.", a: "INVENTED" },
+        { q: "The number 18.", a: "EIGHTEEN" },
+        { q: "The decade after the thirties.", a: "FORTIES" }
+      ]
+    },
+    {
+      id: "music_23",
+      source: "Elton John, in interview",
+      quote: "MY MUSIC IS MY MEDICINE MY THERAPY",
+      questions: [
+        { q: "Sounds and songs you listen to.", a: "MUSIC" },
+        { q: "A word meaning 'exists'.", a: "IS" },
+        { q: "Something that helps heal or treat illness.", a: "MEDICINE" },
+        { q: "Treatment meant to help someone feel better.", a: "THERAPY" },
+        { q: "Belonging to me.", a: "MY" }
+      ]
+    },
+    {
+      id: "music_24",
+      source: "Music Fact File",
+      quote: "A CAPPELLA MEANS SINGING WITHOUT ANY INSTRUMENTS",
+      questions: [
+        { q: "The musical term for singing with no instruments.", a: "CAPPELLA" },
+        { q: "Signifies, or refers to.", a: "MEANS" },
+        { q: "Using your voice to make music.", a: "SINGING" },
+        { q: "Not having something.", a: "WITHOUT" },
+        { q: "Tools used to make music.", a: "INSTRUMENTS" }
+      ]
+    },
+    {
+      id: "music_25",
+      source: "Music Fact File",
+      quote: "A METRONOME HELPS MUSICIANS KEEP A STEADY BEAT",
+      questions: [
+        { q: "A ticking device that keeps a steady musical tempo.", a: "METRONOME" },
+        { q: "Assists, or makes something easier.", a: "HELPS" },
+        { q: "People who play instruments or sing.", a: "MUSICIANS" },
+        { q: "To hold onto, or to maintain.", a: "KEEP" },
+        { q: "Even and consistent, not shaky.", a: "STEADY" }
+      ]
     }
   ],
 
@@ -1241,6 +1661,90 @@ const PUZZLE_DATA = {
         { q: "A strong gray metal.", a: "IRON" },
         { q: "An adult male person.", a: "MAN" }
       ]
+    },
+    {
+      id: "marvel_11",
+      source: "Black Widow (2021)",
+      quote: "SOME OF US ARE MADE OF MORE STUBBORN MATERIAL",
+      questions: [
+        { q: "An amount that isn't all or none.", a: "SOME" },
+        { q: "A word for the speaker and others together.", a: "US" },
+        { q: "Created or built.", a: "MADE" },
+        { q: "Refusing to give up or change.", a: "STUBBORN" },
+        { q: "The substance something is made from.", a: "MATERIAL" }
+      ]
+    },
+    {
+      id: "marvel_12",
+      source: "Captain America: The Winter Soldier (2014)",
+      quote: "THAT SHIELD DOES NOT BELONG TO YOU",
+      questions: [
+        { q: "A round piece of protective gear, like Captain America's.", a: "SHIELD" },
+        { q: "Performs or carries out.", a: "DOES" },
+        { q: "Properly relates to or is owned by.", a: "BELONG" },
+        { q: "A small word showing direction.", a: "TO" },
+        { q: "The person someone is talking to.", a: "YOU" }
+      ]
+    },
+    {
+      id: "marvel_13",
+      source: "Thor (2011)",
+      quote: "I AM LOKI OF ASGARD AND I AM BURDENED WITH GLORIOUS PURPOSE",
+      questions: [
+        { q: "The trickster god from Norse myth and Marvel films.", a: "LOKI" },
+        { q: "The realm of the Norse gods in Marvel.", a: "ASGARD" },
+        { q: "Weighed down by a heavy responsibility.", a: "BURDENED" },
+        { q: "Wonderful and impressive.", a: "GLORIOUS" },
+        { q: "The reason something is done.", a: "PURPOSE" }
+      ]
+    },
+    {
+      id: "marvel_14",
+      source: "The Avengers (2012)",
+      quote: "THERE WAS AN IDEA TO BRING TOGETHER A GROUP OF REMARKABLE PEOPLE",
+      questions: [
+        { q: "A thought or plan.", a: "IDEA" },
+        { q: "To carry or lead something somewhere.", a: "BRING" },
+        { q: "With others, as a group.", a: "TOGETHER" },
+        { q: "Extraordinary, worth noticing.", a: "REMARKABLE" },
+        { q: "Human beings.", a: "PEOPLE" }
+      ]
+    },
+    {
+      id: "marvel_15",
+      source: "WandaVision (2021)",
+      quote: "WHAT IS GRIEF IF NOT LOVE PERSEVERING",
+      questions: [
+        { q: "Deep sadness, especially after a loss.", a: "GRIEF" },
+        { q: "A word used for a possible condition.", a: "IF" },
+        { q: "A word used to say no.", a: "NOT" },
+        { q: "A deep feeling of caring for someone.", a: "LOVE" },
+        { q: "Continuing on despite difficulty.", a: "PERSEVERING" }
+      ]
+    },
+    {
+      id: "marvel_16",
+      source: "Guardians of the Galaxy (2014)",
+      quote: "WE ARE THE GUARDIANS OF THE GALAXY",
+      questions: [
+        { q: "A word for the speaker and others together.", a: "WE" },
+        { q: "Protectors who watch over something.", a: "GUARDIANS" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "A huge group of stars and planets in space.", a: "GALAXY" },
+        { q: "Another way to say 'is', for many things.", a: "ARE" }
+      ]
+    },
+    {
+      id: "marvel_17",
+      source: "Avengers: Age of Ultron (2015)",
+      quote: "A THING IS NOT BEAUTIFUL BECAUSE IT LASTS",
+      questions: [
+        { q: "An object, or something you don't need to name.", a: "THING" },
+        { q: "A word used to say no.", a: "NOT" },
+        { q: "Very pretty or lovely.", a: "BEAUTIFUL" },
+        { q: "A word used to explain why.", a: "BECAUSE" },
+        { q: "Continues to exist over time.", a: "LASTS" }
+      ]
     }
   ],
 
@@ -1363,6 +1867,90 @@ const PUZZLE_DATA = {
         { q: "A bunch of people together.", a: "GROUP" },
         { q: "People who attend school.", a: "STUDENTS" },
         { q: "The dark hours between evening and morning.", a: "NIGHT" }
+      ]
+    },
+    {
+      id: "games_11",
+      source: "Game Fact File — Halo",
+      quote: "MASTER CHIEF IS A SUPER SOLDIER IN GREEN ARMOR",
+      questions: [
+        { q: "Someone highly skilled, or in charge.", a: "MASTER" },
+        { q: "The leader of a group.", a: "CHIEF" },
+        { q: "Extremely powerful or great.", a: "SUPER" },
+        { q: "A person who serves in an army.", a: "SOLDIER" },
+        { q: "Protective gear worn in battle.", a: "ARMOR" }
+      ]
+    },
+    {
+      id: "games_12",
+      source: "Game Fact File — Call of Duty",
+      quote: "CALL OF DUTY IS A POPULAR MILITARY SHOOTER GAME",
+      questions: [
+        { q: "A responsibility or task someone must do.", a: "DUTY" },
+        { q: "Liked by a lot of people.", a: "POPULAR" },
+        { q: "Having to do with soldiers and armies.", a: "MILITARY" },
+        { q: "A game focused on aiming and firing weapons.", a: "SHOOTER" },
+        { q: "Something you play for fun.", a: "GAME" }
+      ]
+    },
+    {
+      id: "games_13",
+      source: "Game Fact File — Animal Crossing",
+      quote: "PLAYERS DECORATE ISLANDS AND BEFRIEND CUTE VILLAGERS",
+      questions: [
+        { q: "To make a place look nicer with items.", a: "DECORATE" },
+        { q: "Pieces of land surrounded by water.", a: "ISLANDS" },
+        { q: "To become friends with someone.", a: "BEFRIEND" },
+        { q: "Adorable, charming to look at.", a: "CUTE" },
+        { q: "Residents of a small town or village.", a: "VILLAGERS" }
+      ]
+    },
+    {
+      id: "games_14",
+      source: "Game Fact File — Among Us",
+      quote: "ONE PLAYER SECRETLY BECOMES THE IMPOSTOR",
+      questions: [
+        { q: "Someone taking part in a game.", a: "PLAYER" },
+        { q: "In a hidden way, without others knowing.", a: "SECRETLY" },
+        { q: "Turns into, or starts being.", a: "BECOMES" },
+        { q: "Someone secretly pretending to be someone else.", a: "IMPOSTOR" },
+        { q: "The number 1.", a: "ONE" }
+      ]
+    },
+    {
+      id: "games_15",
+      source: "Game Fact File — Fortnite",
+      quote: "A HUNDRED PLAYERS DROP ONTO ONE ISLAND",
+      questions: [
+        { q: "The number 100.", a: "HUNDRED" },
+        { q: "People who play a game.", a: "PLAYERS" },
+        { q: "To fall or descend suddenly.", a: "DROP" },
+        { q: "Moving to a position on top of something.", a: "ONTO" },
+        { q: "A piece of land surrounded by water.", a: "ISLAND" }
+      ]
+    },
+    {
+      id: "games_16",
+      source: "Game Fact File — Street Fighter",
+      quote: "FIGHTERS FROM AROUND THE WORLD BATTLE FOR GLORY",
+      questions: [
+        { q: "People who fight, especially in combat games.", a: "FIGHTERS" },
+        { q: "Surrounding, or in various parts of.", a: "AROUND" },
+        { q: "The whole planet Earth.", a: "WORLD" },
+        { q: "A fight or contest between two sides.", a: "BATTLE" },
+        { q: "Great honor or fame.", a: "GLORY" }
+      ]
+    },
+    {
+      id: "games_17",
+      source: "Game Fact File — Persona 5",
+      quote: "THE PROTAGONISTS AWAKEN THEIR PERSONAS TO FIGHT SHADOWS",
+      questions: [
+        { q: "The main heroes of a story.", a: "PROTAGONISTS" },
+        { q: "To wake up, or bring something to life.", a: "AWAKEN" },
+        { q: "The masked alter-egos summoned in this game's battles.", a: "PERSONAS" },
+        { q: "To battle or struggle against something.", a: "FIGHT" },
+        { q: "Dark shapes, or the monsters in this game's world.", a: "SHADOWS" }
       ]
     }
   ]

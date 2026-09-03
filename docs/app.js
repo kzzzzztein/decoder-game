@@ -56,6 +56,37 @@ function renderDailyCard() {
   }
 }
 
+// ---------------- heart-claim animation ----------------
+function flyHearts(fromEl, toEl, count = 6) {
+  const fromRect = fromEl.getBoundingClientRect();
+  const toRect = toEl.getBoundingClientRect();
+  const startX = fromRect.left + fromRect.width / 2;
+  const startY = fromRect.top + fromRect.height / 2;
+  const endX = toRect.left + toRect.width / 2;
+  const endY = toRect.top + toRect.height / 2;
+
+  for (let i = 0; i < count; i++) {
+    const heart = document.createElement("span");
+    heart.className = "flying-heart-anim";
+    heart.textContent = "♥";
+    const jitterX = (Math.random() - 0.5) * 24;
+    const jitterY = (Math.random() - 0.5) * 12;
+    heart.style.left = `${startX + jitterX}px`;
+    heart.style.top = `${startY + jitterY}px`;
+    heart.style.setProperty("--dx", `${endX - startX - jitterX}px`);
+    heart.style.setProperty("--dy", `${endY - startY - jitterY}px`);
+    heart.style.animationDelay = `${i * 60}ms`;
+    document.body.appendChild(heart);
+    heart.addEventListener("animationend", () => heart.remove());
+  }
+
+  setTimeout(() => {
+    toEl.classList.remove("pill-pulse");
+    void toEl.offsetWidth;
+    toEl.classList.add("pill-pulse");
+  }, count * 60 + 500);
+}
+
 document.getElementById("dailyBtn").addEventListener("click", async () => {
   const btn = document.getElementById("dailyBtn");
   btn.disabled = true;
@@ -63,7 +94,8 @@ document.getElementById("dailyBtn").addEventListener("click", async () => {
   if (result) {
     document.getElementById("dailySub").textContent =
       `+${result.reward} ♥ claimed! ${result.streak} day streak.`;
-    updateHeartsPill();
+    flyHearts(btn, document.getElementById("heartsPill"), Math.min(8, result.reward));
+    setTimeout(updateHeartsPill, result.reward > 8 ? 500 : Math.min(8, result.reward) * 60 + 400);
   }
   renderDailyCard();
 });
@@ -85,8 +117,12 @@ document.querySelectorAll("[data-nav]").forEach(btn => {
 // ---------------- Home screen ----------------
 function renderHome() {
   const list = document.getElementById("categoryList");
+  const dotsWrap = document.getElementById("carouselDots");
   list.innerHTML = "";
-  Object.keys(PUZZLE_DATA).forEach(catKey => {
+  dotsWrap.innerHTML = "";
+
+  const catKeys = Object.keys(PUZZLE_DATA);
+  catKeys.forEach((catKey, i) => {
     const meta = CATEGORY_META[catKey];
     const puzzles = PUZZLE_DATA[catKey];
     const solvedCount = (Backend.getPlayerData().solved[catKey] || []).length;
@@ -101,12 +137,23 @@ function renderHome() {
         <h3>${meta.label}</h3>
         <div class="meta">${solvedCount} / ${puzzles.length} cracked</div>
       </div>
-      <div class="chev">›</div>
-      <div class="progress-track" style="width:${pct}%"></div>
+      <div class="progress-track" style="--pct:${pct}%"></div>
     `;
     tile.addEventListener("click", () => renderPicker(catKey));
     list.appendChild(tile);
+
+    const dot = document.createElement("span");
+    dot.className = "carousel-dot" + (i === 0 ? " active" : "");
+    dotsWrap.appendChild(dot);
   });
+
+  // keep the dots in sync with whichever card is centered as the user swipes
+  list.onscroll = () => {
+    const cardWidth = list.firstElementChild ? list.firstElementChild.getBoundingClientRect().width + 16 : 1;
+    const activeIndex = Math.round(list.scrollLeft / cardWidth);
+    Array.from(dotsWrap.children).forEach((d, i) => d.classList.toggle("active", i === activeIndex));
+  };
+
   updateScorePill();
   renderDailyCard();
   showScreen("screen-home");
@@ -387,13 +434,8 @@ document.getElementById("winNextBtn").addEventListener("click", () => {
   openPuzzle(state.category, nextIndex);
 });
 
-// ---------------- Developer note / boot ----------------
-const backendReady = Backend.initBackend();
+// ---------------- Boot ----------------
+Backend.initBackend(); // renderHome() is already active; onPlayerDataChange
+                        // (registered above) refreshes it once this resolves
 
-document.getElementById("startGameBtn").addEventListener("click", async () => {
-  document.getElementById("devNoteModal").style.display = "none";
-  await backendReady;
-  renderHome();
-});
-
-renderHome(); // snappy first paint behind the modal; refreshes once Backend resolves
+renderHome(); // snappy first paint, refreshes automatically when Backend is ready
