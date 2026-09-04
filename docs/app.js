@@ -176,7 +176,7 @@ function renderPicker(catKey) {
     const solved = isSolved(catKey, p.id);
     chip.className = "chip" + (solved ? " solved" : "");
     chip.textContent = i + 1;
-    chip.addEventListener("click", () => openPuzzle(catKey, i));
+    chip.addEventListener("click", () => playWalkTransition(() => openPuzzle(catKey, i)));
     grid.appendChild(chip);
   });
   updateScorePill();
@@ -431,8 +431,27 @@ document.getElementById("winNextBtn").addEventListener("click", () => {
   document.getElementById("winOverlay").style.display = "none";
   const puzzles = PUZZLE_DATA[state.category];
   const nextIndex = (state.puzzleIndex + 1) % puzzles.length;
-  openPuzzle(state.category, nextIndex);
+  playWalkTransition(() => openPuzzle(state.category, nextIndex));
 });
+
+// ---------------- walk transition (pet walks to the next level) ----------------
+function playWalkTransition(onComplete) {
+  const overlay = document.getElementById("walkTransition");
+  const blobSlot = document.getElementById("walkBlob");
+  const label = document.getElementById("walkLabel");
+
+  blobSlot.innerHTML = Pet.getBlobMarkup();
+  const labels = ["Off to the next case...", "On the way...", "Walking over..."];
+  label.textContent = labels[Math.floor(Math.random() * labels.length)];
+
+  overlay.style.display = "block";
+
+  const WALK_DURATION_MS = 2200;
+  setTimeout(() => {
+    overlay.style.display = "none";
+    onComplete();
+  }, WALK_DURATION_MS);
+}
 
 // ---------------- Boot ----------------
 Backend.initBackend(); // renderHome() is already active; onPlayerDataChange

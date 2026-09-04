@@ -115,7 +115,18 @@ either way.
    Firebase errors, it's connected. Progress will now appear as a document
    under `players/<some-id>` in the Firestore console.
 
-## 4. Your pet (v1)
+## 4. Walking transitions
+
+Whenever you move to a new puzzle — picking one from the level list, or
+tapping "Next" after solving one — your actual pet (its current color,
+mood, and equipped accessory) walks across the screen before the next
+puzzle loads. It's a small taste of the full walking world-map that's
+still on the roadmap, but already live: `playWalkTransition()` in
+`app.js` wraps any navigation and calls `Pet.getBlobMarkup()` to render
+whichever blob you've actually customized, so it's always *your* pet
+making the trip, not a generic sprite.
+
+## 5. Your pet (v1)
 
 A kawaii blob companion lives on its own screen (tap "Visit your pet" on
 the home screen). It's a real Tamagotchi-style system:
@@ -148,7 +159,7 @@ accessories, 1 mini-game, 6 colors. Everything is catalog-driven in
 `pet.js` (`FACES`, `ACCESSORY_SVG`), so adding a new food, outfit, color,
 or a second mini-game doesn't require restructuring anything.
 
-## 5. How the puzzle mechanic works
+## 6. How the puzzle mechanic works
 
 - `data.js` holds every puzzle as `{ id, source, quote, questions }`.
 - `questions` is always an array of exactly 5 `{ q, a }` pairs — `a` must be
@@ -170,7 +181,7 @@ or a second mini-game doesn't require restructuring anything.
   quote and its source reveal, progress saves to the phone's local
   storage, and a star rating pops up (3 stars for zero mistakes).
 
-## 6. Adding more puzzles (scaling up to 50 per category)
+## 7. Adding more puzzles (scaling up to 50 per category)
 
 Just append more objects to the right array in `data.js`:
 
@@ -204,7 +215,7 @@ private one — copyright holders can and do issue takedowns on exactly this
 kind of use. Sticking to spoken quotes and music trivia keeps the category
 totally safe.
 
-## 7. File structure
+## 8. File structure
 
 ```
 decoder-game/

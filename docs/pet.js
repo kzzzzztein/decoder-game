@@ -480,9 +480,17 @@ const Pet = (() => {
     });
   }
 
+  // Returns the current pet's blob SVG markup, for reuse outside the pet
+  // screen (e.g. the walking transition between puzzles).
+  function getBlobMarkup() {
+    const pet = Backend.getPlayerData().pet;
+    const mood = Backend.getPetMood();
+    return buildBlobSVG(mood, pet.equipped, pet.color);
+  }
+
   document.addEventListener("DOMContentLoaded", bindOnce);
   // in case this script runs after DOMContentLoaded already fired
   if (document.readyState !== "loading") bindOnce();
 
-  return { renderPet };
+  return { renderPet, getBlobMarkup };
 })();
