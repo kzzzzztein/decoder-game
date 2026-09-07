@@ -11,9 +11,10 @@ reward** with a streak bonus and a flying-hearts claim animation, and
 progress can sync to an account via Firebase — or just run entirely
 on-device with zero setup.
 
-**7 categories, 17–25 puzzles each right now (159 total)** — working
-toward 50 each (350 total). The data file is built so more can be
-appended without touching any game code. See "Adding more puzzles" below.
+**7 categories, 25 puzzles each, 175 total** — evenly matched across
+the board now. Working toward 50 each (350 total). The data file is
+built so more can be appended without touching any game code. See
+"Adding more puzzles" below.
 
 Categories are picked from a swipeable horizontal carousel (not a list) —
 built for one-thumb phone use. There's no intro/developer-note screen
@@ -126,7 +127,7 @@ still on the roadmap, but already live: `playWalkTransition()` in
 whichever blob you've actually customized, so it's always *your* pet
 making the trip, not a generic sprite.
 
-## 5. Your pet (v1)
+## 5. Your pet (v2)
 
 A kawaii blob companion lives on its own screen (tap "Visit your pet" on
 the home screen). It's a real Tamagotchi-style system:
@@ -134,6 +135,9 @@ the home screen). It's a real Tamagotchi-style system:
 - **Naming & color** — the first time you visit, it asks you to name your
   blob and pick its color from 6 swatches. Tap the pencil icon next to its
   name anytime to change either later.
+- **Richer design** — the blob now has a glossy gradient body, a soft
+  highlight shine, small rounded ears, a grounding shadow, and a blush
+  that reads clearly in every mood.
 - **3 stats** — Hunger, Hygiene, Happiness (0–100), each decaying by 2
   points per real hour since you last checked in. Neglect it and its
   face changes: happy → neutral → sad → sick, with a little idle
@@ -148,16 +152,30 @@ the home screen). It's a real Tamagotchi-style system:
   drag it onto the blob's body. It leans in as you get close, then does a
   little chomp animation and the food disappears when you release on
   target. Missing the blob just cancels the feed, no food wasted.
-- **Play** — opens a 20-second "Catch the Hearts" mini-game. Your score
-  converts into happiness gained and a small hearts bonus.
-- **Shop** — spend hearts on food (consumable) or accessories (permanent,
-  equip/unequip anytime — bow tie, party hat, sunglasses, scarf so far).
+- **Play** — tapping Play now opens a picker between three mini-games:
+  - **Catch the Hearts** — 20 seconds, tap falling hearts before they land.
+  - **Bubble Pop** — 20 seconds, tap bubbles as they float upward.
+  - **Memory Match** — flip a 12-card grid to find all 6 pairs; fewer
+    moves earns a bigger reward.
 
-This is intentionally v1 of a "deep" system: 3 stats, 3 foods, 4
-accessories, 1 mini-game, 6 colors. Everything is catalog-driven in
-`backend.js` (`FOOD_CATALOG`, `ACCESSORY_CATALOG`, `PET_COLORS`) and
-`pet.js` (`FACES`, `ACCESSORY_SVG`), so adding a new food, outfit, color,
-or a second mini-game doesn't require restructuring anything.
+  All three convert your performance into happiness gained and a small
+  hearts bonus.
+- **Shop** — now has three sections:
+  - **Food** (consumable) — Berry, Sandwich, Feast.
+  - **Suits** (permanent, full outfits) — Hero, Ninja, Astronaut, Pajama,
+    Tuxedo. Each one visibly changes the blob: a cape and chest emblem,
+    a mask over the eyes, a glass helmet with antenna, a nightcap with
+    star pattern, or a jacket with bowtie.
+  - **Accessories** (permanent, small items, worn alongside a suit) — Bow
+    Tie, Party Hat, Sunglasses, Scarf, Crown, Headphones, Flower Clip,
+    Backpack.
+
+This is v2 of the "deep" system: 3 stats, 3 foods, 5 suits, 8
+accessories, 3 mini-games, 6 colors. Everything is catalog-driven in
+`backend.js` (`FOOD_CATALOG`, `ACCESSORY_CATALOG`, `SUIT_CATALOG`,
+`PET_COLORS`) and `pet.js` (`FACES`, `ACCESSORY_SVG`, `SUIT_SVG`,
+`MEMORY_EMOJIS`), so adding a new food, outfit, suit, color, or another
+mini-game doesn't require restructuring anything.
 
 ## 6. How the puzzle mechanic works
 

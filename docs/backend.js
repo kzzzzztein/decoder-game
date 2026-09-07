@@ -35,7 +35,18 @@ const Backend = (() => {
     { id: "bowtie",     name: "Bow Tie",     emoji: "🎀" , cost: 20 },
     { id: "partyhat",   name: "Party Hat",   emoji: "🎉", cost: 20 },
     { id: "sunglasses", name: "Sunglasses",  emoji: "🕶️", cost: 25 },
-    { id: "scarf",      name: "Scarf",       emoji: "🧣", cost: 25 }
+    { id: "scarf",      name: "Scarf",       emoji: "🧣", cost: 25 },
+    { id: "crown",      name: "Crown",       emoji: "👑", cost: 35 },
+    { id: "headphones", name: "Headphones",  emoji: "🎧", cost: 30 },
+    { id: "flower",     name: "Flower Clip", emoji: "🌸", cost: 15 },
+    { id: "backpack",   name: "Backpack",    emoji: "🎒", cost: 25 }
+  ];
+  const SUIT_CATALOG = [
+    { id: "hero",      name: "Hero Suit",     emoji: "🦸", cost: 40 },
+    { id: "ninja",      name: "Ninja Suit",    emoji: "🥷", cost: 40 },
+    { id: "astronaut", name: "Astronaut Suit", emoji: "🧑‍🚀", cost: 50 },
+    { id: "pajama",    name: "Pajama Suit",    emoji: "🌙", cost: 30 },
+    { id: "tuxedo",    name: "Tuxedo",         emoji: "🎩", cost: 45 }
   ];
   const PET_DECAY_PER_HOUR = 2;   // each stat drops this much per real hour
   const CLEAN_GAIN = 25;
@@ -60,7 +71,9 @@ const Backend = (() => {
       lastUpdate: Date.now(),
       inventory: {},        // { berry: 2, sandwich: 1, ... }
       owned: [],            // accessory ids purchased
-      equipped: null         // accessory id currently worn, or null
+      equipped: null,        // accessory id currently worn, or null
+      ownedSuits: [],       // suit ids purchased
+      equippedSuit: null    // suit id currently worn, or null
     };
   }
 
@@ -347,6 +360,24 @@ const Backend = (() => {
     await persist();
   }
 
+  async function buySuit(suitId) {
+    const item = SUIT_CATALOG.find(s => s.id === suitId);
+    if (!item) return { success: false, reason: "unknown-item" };
+    if (playerData.pet.ownedSuits.includes(suitId)) return { success: false, reason: "already-owned" };
+    const ok = await spendHearts(item.cost);
+    if (!ok) return { success: false, reason: "not-enough-hearts" };
+    playerData.pet.ownedSuits.push(suitId);
+    await persist();
+    return { success: true };
+  }
+
+  async function equipSuit(suitId) {
+    if (!playerData) return;
+    if (suitId !== null && !playerData.pet.ownedSuits.includes(suitId)) return;
+    playerData.pet.equippedSuit = playerData.pet.equippedSuit === suitId ? null : suitId;
+    await persist();
+  }
+
   return {
     initBackend,
     getPlayerData,
@@ -359,6 +390,7 @@ const Backend = (() => {
     onPlayerDataChange,
     FOOD_CATALOG,
     ACCESSORY_CATALOG,
+    SUIT_CATALOG,
     PET_COLORS,
     applyPetDecay,
     getPetMood,
@@ -370,6 +402,8 @@ const Backend = (() => {
     buyFood,
     buyAccessory,
     equipAccessory,
+    buySuit,
+    equipSuit,
     setPetName,
     setPetColor
   };

@@ -1745,6 +1745,102 @@ const PUZZLE_DATA = {
         { q: "A word used to explain why.", a: "BECAUSE" },
         { q: "Continues to exist over time.", a: "LASTS" }
       ]
+    },
+    {
+      id: "marvel_18",
+      source: "The Avengers (2012)",
+      quote: "KNEEL BEFORE ME I SAID KNEEL",
+      questions: [
+        { q: "To bend down on one knee, often to show submission.", a: "KNEEL" },
+        { q: "Earlier than, in front of.", a: "BEFORE" },
+        { q: "A word for the speaker.", a: "ME" },
+        { q: "Spoke, or expressed in words.", a: "SAID" },
+        { q: "A word for the speaker.", a: "I" }
+      ]
+    },
+    {
+      id: "marvel_19",
+      source: "Spider-Man: Homecoming (2017)",
+      quote: "I'M YOUR FRIENDLY NEIGHBORHOOD SPIDER-MAN",
+      questions: [
+        { q: "Short way to say 'I am'.", a: "I'M" },
+        { q: "Belonging to you.", a: "YOUR" },
+        { q: "Kind and welcoming.", a: "FRIENDLY" },
+        { q: "The area around where you live.", a: "NEIGHBORHOOD" },
+        { q: "The wall-crawling hero with spider powers.", a: "SPIDER-MAN" }
+      ]
+    },
+    {
+      id: "marvel_20",
+      source: "Black Panther (2018)",
+      quote: "A KING DOES NOT RUN",
+      questions: [
+        { q: "A small word before a noun.", a: "A" },
+        { q: "A male ruler of a kingdom.", a: "KING" },
+        { q: "Performs or carries out.", a: "DOES" },
+        { q: "A word used to say no.", a: "NOT" },
+        { q: "To move fast on your feet.", a: "RUN" }
+      ]
+    },
+    {
+      id: "marvel_21",
+      source: "Ant-Man (2015)",
+      quote: "I AM NOT GOING TO LOSE YOU AGAIN",
+      questions: [
+        { q: "A word used to say no.", a: "NOT" },
+        { q: "Moving toward somewhere.", a: "GOING" },
+        { q: "To no longer have something.", a: "LOSE" },
+        { q: "The person someone is talking to.", a: "YOU" },
+        { q: "One more time.", a: "AGAIN" }
+      ]
+    },
+    {
+      id: "marvel_22",
+      source: "Captain Marvel (2019)",
+      quote: "I HAVE NOTHING TO PROVE TO YOU",
+      questions: [
+        { q: "To own or hold.", a: "HAVE" },
+        { q: "Not a single thing.", a: "NOTHING" },
+        { q: "To show something is true.", a: "PROVE" },
+        { q: "The person someone is talking to.", a: "YOU" },
+        { q: "A small word showing direction.", a: "TO" }
+      ]
+    },
+    {
+      id: "marvel_23",
+      source: "Iron Man 3 (2013)",
+      quote: "HEROES ARE MADE BY THE PATH THEY CHOOSE",
+      questions: [
+        { q: "Brave people who protect others.", a: "HEROES" },
+        { q: "Created or built.", a: "MADE" },
+        { q: "A route or way of doing things.", a: "PATH" },
+        { q: "A word for other people already mentioned.", a: "THEY" },
+        { q: "To pick or decide.", a: "CHOOSE" }
+      ]
+    },
+    {
+      id: "marvel_24",
+      source: "Guardians of the Galaxy (2014)",
+      quote: "I'M ONE OF THE GOOD GUYS",
+      questions: [
+        { q: "The number 1.", a: "ONE" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "The opposite of bad.", a: "GOOD" },
+        { q: "An informal word for people, usually men.", a: "GUYS" },
+        { q: "Short way to say 'I am'.", a: "I'M" }
+      ]
+    },
+    {
+      id: "marvel_25",
+      source: "Avengers: Endgame (2019)",
+      quote: "PART OF THE JOURNEY IS THE END",
+      questions: [
+        { q: "A piece or section of something.", a: "PART" },
+        { q: "Belonging to, or made from.", a: "OF" },
+        { q: "A trip from one place to another.", a: "JOURNEY" },
+        { q: "A word meaning 'exists'.", a: "IS" },
+        { q: "The finish, or the last part.", a: "END" }
+      ]
     }
   ],
 
@@ -1951,6 +2047,102 @@ const PUZZLE_DATA = {
         { q: "The masked alter-egos summoned in this game's battles.", a: "PERSONAS" },
         { q: "To battle or struggle against something.", a: "FIGHT" },
         { q: "Dark shapes, or the monsters in this game's world.", a: "SHADOWS" }
+      ]
+    },
+    {
+      id: "games_18",
+      source: "Game Fact File — The Sims",
+      quote: "PLAYERS CONTROL VIRTUAL PEOPLE IN DAILY LIFE",
+      questions: [
+        { q: "To direct or command something.", a: "CONTROL" },
+        { q: "Existing only inside a computer or game.", a: "VIRTUAL" },
+        { q: "Human beings.", a: "PEOPLE" },
+        { q: "Happening every day.", a: "DAILY" },
+        { q: "Being alive, existing.", a: "LIFE" }
+      ]
+    },
+    {
+      id: "games_19",
+      source: "Game Fact File — Overwatch",
+      quote: "TEAMS OF HEROES BATTLE FOR OBJECTIVES",
+      questions: [
+        { q: "Groups of players working together.", a: "TEAMS" },
+        { q: "Brave characters with special abilities.", a: "HEROES" },
+        { q: "A fight or contest between two sides.", a: "BATTLE" },
+        { q: "Intended for, meant for.", a: "FOR" },
+        { q: "Goals or targets to complete.", a: "OBJECTIVES" }
+      ]
+    },
+    {
+      id: "games_20",
+      source: "Game Fact File — The Legend of Zelda",
+      quote: "THE MASTER SWORD CAN ONLY BE WIELDED BY A HERO",
+      questions: [
+        { q: "Someone highly skilled, or in charge.", a: "MASTER" },
+        { q: "A long bladed weapon.", a: "SWORD" },
+        { q: "Held and used, especially a weapon.", a: "WIELDED" },
+        { q: "A brave person who saves others.", a: "HERO" },
+        { q: "Just, solely.", a: "ONLY" }
+      ]
+    },
+    {
+      id: "games_21",
+      source: "Game Fact File — Minecraft",
+      quote: "CREEPERS EXPLODE WHEN THEY GET TOO CLOSE",
+      questions: [
+        { q: "Green, hissing enemies known for exploding.", a: "CREEPERS" },
+        { q: "To burst suddenly with force.", a: "EXPLODE" },
+        { q: "A word used to ask about time.", a: "WHEN" },
+        { q: "To receive, or to become.", a: "GET" },
+        { q: "Near, not far away.", a: "CLOSE" }
+      ]
+    },
+    {
+      id: "games_22",
+      source: "Game Fact File — Super Smash Bros.",
+      quote: "FIGHTERS FROM DIFFERENT GAMES BATTLE ON ONE STAGE",
+      questions: [
+        { q: "Not the same as another.", a: "DIFFERENT" },
+        { q: "Things people play for fun.", a: "GAMES" },
+        { q: "A fight or contest between two sides.", a: "BATTLE" },
+        { q: "The number 1.", a: "ONE" },
+        { q: "A platform where something happens or is performed.", a: "STAGE" }
+      ]
+    },
+    {
+      id: "games_23",
+      source: "Game Fact File — Roblox",
+      quote: "PLAYERS CAN BUILD AND SHARE THEIR OWN GAMES",
+      questions: [
+        { q: "To construct something.", a: "BUILD" },
+        { q: "To let others use or enjoy something with you.", a: "SHARE" },
+        { q: "Belonging to them.", a: "THEIR" },
+        { q: "Belonging to oneself.", a: "OWN" },
+        { q: "Things people play for fun.", a: "GAMES" }
+      ]
+    },
+    {
+      id: "games_24",
+      source: "Game Fact File — Final Fantasy",
+      quote: "HEROES GO ON A QUEST TO SAVE THE WORLD",
+      questions: [
+        { q: "Brave people who protect others.", a: "HEROES" },
+        { q: "A long journey to complete a goal.", a: "QUEST" },
+        { q: "To rescue or keep safe.", a: "SAVE" },
+        { q: "The whole planet Earth.", a: "WORLD" },
+        { q: "To move or leave.", a: "GO" }
+      ]
+    },
+    {
+      id: "games_25",
+      source: "Game Fact File — Tetris",
+      quote: "FALLING BLOCKS MUST FIT TOGETHER PERFECTLY",
+      questions: [
+        { q: "Dropping down from above.", a: "FALLING" },
+        { q: "Square-shaped building pieces.", a: "BLOCKS" },
+        { q: "To match or go together properly.", a: "FIT" },
+        { q: "With others, as a group.", a: "TOGETHER" },
+        { q: "In a flawless, exact way.", a: "PERFECTLY" }
       ]
     }
   ]

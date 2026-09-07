@@ -31,7 +31,7 @@ const Pet = (() => {
   function draw() {
     const pet = Backend.getPlayerData().pet;
     const mood = Backend.getPetMood();
-    document.getElementById("petStage").innerHTML = buildBlobSVG(mood, pet.equipped, pet.color);
+    document.getElementById("petStage").innerHTML = buildBlobSVG(mood, pet.equipped, pet.color, pet.equippedSuit);
     document.getElementById("petName").textContent = pet.name;
     document.getElementById("petHeartsLabel").textContent = `♥ ${Backend.getPlayerData().hearts}`;
     setBar("hunger", pet.hunger);
@@ -51,17 +51,37 @@ const Pet = (() => {
   }
 
   // ---------------- blob SVG ----------------
-  function buildBlobSVG(mood, equippedId, bodyColor) {
-    const bodyStroke = shadeColor(bodyColor, -18);
+  // Layer order matters: shadow → cape (suit back) → ears → gradient body →
+  // suit body-overlay (emblem/jacket/pattern) → shine → blush → face →
+  // accessory → suit front (mask/helmet/nightcap).
+  function buildBlobSVG(mood, equippedId, bodyColor, suitId) {
+    const uid = "g" + Math.random().toString(36).slice(2, 8);
+    const lightColor = shadeColor(bodyColor, 26);
+    const bodyStroke = shadeColor(bodyColor, -30);
     const face = FACES[mood] || FACES.neutral;
     const accessory = ACCESSORY_SVG[equippedId] || "";
+    const suit = SUIT_SVG[suitId] || { back: "", bodyOverlay: "", front: "" };
+
     return `
       <svg viewBox="0 0 200 200" class="pet-blob pet-mood-${mood}">
-        <ellipse cx="100" cy="115" rx="72" ry="66" fill="${bodyColor}" stroke="${bodyStroke}" stroke-width="3"/>
-        <ellipse cx="72" cy="120" rx="12" ry="8" fill="#FFB6D2" opacity="0.7"/>
-        <ellipse cx="128" cy="120" rx="12" ry="8" fill="#FFB6D2" opacity="0.7"/>
+        <defs>
+          <radialGradient id="bodyGrad-${uid}" cx="36%" cy="28%" r="78%">
+            <stop offset="0%" stop-color="${lightColor}"/>
+            <stop offset="100%" stop-color="${bodyColor}"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="100" cy="180" rx="54" ry="9" fill="rgba(67,41,58,0.14)"/>
+        ${suit.back}
+        <ellipse cx="68" cy="53" rx="15" ry="18" fill="${bodyColor}" stroke="${bodyStroke}" stroke-width="3"/>
+        <ellipse cx="132" cy="53" rx="15" ry="18" fill="${bodyColor}" stroke="${bodyStroke}" stroke-width="3"/>
+        <ellipse cx="100" cy="115" rx="72" ry="66" fill="url(#bodyGrad-${uid})" stroke="${bodyStroke}" stroke-width="3"/>
+        ${suit.bodyOverlay}
+        <ellipse cx="70" cy="76" rx="24" ry="15" fill="#FFFFFF" opacity="0.32"/>
+        <ellipse cx="72" cy="120" rx="12" ry="8" fill="#FFB6D2" opacity="0.65"/>
+        <ellipse cx="128" cy="120" rx="12" ry="8" fill="#FFB6D2" opacity="0.65"/>
         ${face}
         ${accessory}
+        ${suit.front}
       </svg>
     `;
   }
@@ -113,7 +133,42 @@ const Pet = (() => {
     bowtie: `<path d="M 88 148 L 100 140 L 88 132 Z M 112 148 L 100 140 L 112 132 Z" fill="#E8578D" stroke="#C23570" stroke-width="2"/><circle cx="100" cy="140" r="4" fill="#C23570"/>`,
     partyhat: `<path d="M 100 30 L 82 68 L 118 68 Z" fill="#F2A93B" stroke="#D9891B" stroke-width="2"/><circle cx="100" cy="30" r="5" fill="#E8455C"/>`,
     sunglasses: `<rect x="65" y="94" width="26" height="14" rx="6" fill="#43293A"/><rect x="109" y="94" width="26" height="14" rx="6" fill="#43293A"/><rect x="91" y="98" width="18" height="4" fill="#43293A"/>`,
-    scarf: `<path d="M 60 140 Q 100 158 140 140 L 140 152 Q 100 168 60 152 Z" fill="#2FB8AE" stroke="#22897F" stroke-width="2"/>`
+    scarf: `<path d="M 60 140 Q 100 158 140 140 L 140 152 Q 100 168 60 152 Z" fill="#2FB8AE" stroke="#22897F" stroke-width="2"/>`,
+    crown: `<path d="M 76 58 L 84 36 L 100 52 L 116 36 L 124 58 Z" fill="#FFD34D" stroke="#D9891B" stroke-width="2"/><circle cx="100" cy="48" r="3.5" fill="#E8455C"/><circle cx="84" cy="52" r="2.5" fill="#2FB8AE"/><circle cx="116" cy="52" r="2.5" fill="#2FB8AE"/>`,
+    headphones: `<path d="M 38 88 Q 100 26 162 88" fill="none" stroke="#43293A" stroke-width="6" stroke-linecap="round"/><circle cx="38" cy="94" r="14" fill="#43293A"/><circle cx="162" cy="94" r="14" fill="#43293A"/><circle cx="38" cy="94" r="6.5" fill="#8A6A7B"/><circle cx="162" cy="94" r="6.5" fill="#8A6A7B"/>`,
+    flower: `<g transform="translate(148,78)"><circle cx="0" cy="-7" r="6" fill="#FF8FB3"/><circle cx="7" cy="0" r="6" fill="#FF8FB3"/><circle cx="0" cy="7" r="6" fill="#FF8FB3"/><circle cx="-7" cy="0" r="6" fill="#FF8FB3"/><circle cx="0" cy="0" r="4.5" fill="#FFD34D"/></g>`,
+    backpack: `<rect x="140" y="118" width="26" height="32" rx="8" fill="#2FB8AE" stroke="#22897F" stroke-width="2"/><rect x="147" y="110" width="12" height="13" rx="4" fill="#2FB8AE" stroke="#22897F" stroke-width="2"/>`
+  };
+
+  // Suits are full-body outfits: `back` renders behind the body (capes),
+  // `bodyOverlay` renders just after the body fill (emblems, jackets,
+  // patterns), and `front` renders after the face (masks, helmets, caps).
+  const SUIT_SVG = {
+    hero: {
+      back: `<path d="M 58 108 Q 18 158 42 196 Q 68 176 76 138 Z M 142 108 Q 182 158 158 196 Q 132 176 124 138 Z" fill="#E8455C" opacity="0.88"/>`,
+      bodyOverlay: `<path d="M 100 88 L 107 106 L 126 108 L 111 120 L 116 139 L 100 128 L 84 139 L 89 120 L 74 108 L 93 106 Z" fill="#FFD34D" stroke="#D9891B" stroke-width="1.5"/>`,
+      front: ``
+    },
+    ninja: {
+      back: ``,
+      bodyOverlay: `<path d="M 40 100 Q 100 82 160 100 L 160 118 Q 100 100 40 118 Z" fill="#2B2B36"/>`,
+      front: `<rect x="60" y="93" width="80" height="18" rx="7" fill="#2B2B36"/><ellipse cx="80" cy="102" rx="6" ry="4" fill="#DCE4FF" opacity="0.85"/><ellipse cx="120" cy="102" rx="6" ry="4" fill="#DCE4FF" opacity="0.85"/>`
+    },
+    astronaut: {
+      back: ``,
+      bodyOverlay: `<rect x="40" y="150" width="120" height="26" rx="10" fill="#DADFE6" stroke="#AEB6C0" stroke-width="2"/>`,
+      front: `<circle cx="100" cy="90" r="58" fill="#DCEFFF" opacity="0.28" stroke="#FFFFFF" stroke-width="3"/><path d="M 55 60 Q 100 30 145 60" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.6"/><rect x="94" y="18" width="12" height="16" rx="3" fill="#DADFE6" stroke="#AEB6C0" stroke-width="1.5"/>`
+    },
+    pajama: {
+      back: ``,
+      bodyOverlay: `<circle cx="82" cy="150" r="4" fill="#FFFFFF" opacity="0.7"/><circle cx="118" cy="158" r="3" fill="#FFFFFF" opacity="0.7"/><path d="M 130 148 a4 4 0 1 0 0.1 0 Z" fill="#FFF3B0" opacity="0.8"/><circle cx="70" cy="165" r="2.5" fill="#FFFFFF" opacity="0.7"/>`,
+      front: `<path d="M 92 34 Q 100 14 118 26 Q 108 32 108 46 Q 98 40 92 34 Z" fill="#E4D4FF" stroke="#C3A8E8" stroke-width="2"/><circle cx="118" cy="26" r="4" fill="#FFFFFF"/>`
+    },
+    tuxedo: {
+      back: ``,
+      bodyOverlay: `<path d="M 44 130 Q 100 118 156 130 L 156 176 Q 100 190 44 176 Z" fill="#2B2B36"/><path d="M 88 130 L 100 150 L 112 130 Z" fill="#FFFFFF"/><path d="M 92 140 L 100 148 L 108 140 L 100 133 Z" fill="#2B2B36"/>`,
+      front: ``
+    }
   };
 
   // ---------------- touch reaction ----------------
@@ -347,8 +402,10 @@ const Pet = (() => {
     const pet = Backend.getPlayerData().pet;
     const foodWrap = document.getElementById("shopFood");
     const accWrap = document.getElementById("shopAccessories");
+    const suitWrap = document.getElementById("shopSuits");
     foodWrap.innerHTML = "";
     accWrap.innerHTML = "";
+    suitWrap.innerHTML = "";
 
     Backend.FOOD_CATALOG.forEach(food => {
       const have = pet.inventory[food.id] || 0;
@@ -366,9 +423,20 @@ const Pet = (() => {
       foodWrap.appendChild(row);
     });
 
-    Backend.ACCESSORY_CATALOG.forEach(item => {
-      const owned = pet.owned.includes(item.id);
-      const equipped = pet.equipped === item.id;
+    buildEquippableRows(accWrap, Backend.ACCESSORY_CATALOG, pet.owned, pet.equipped,
+      Backend.buyAccessory, Backend.equipAccessory);
+    buildEquippableRows(suitWrap, Backend.SUIT_CATALOG, pet.ownedSuits, pet.equippedSuit,
+      Backend.buySuit, Backend.equipSuit);
+
+    document.getElementById("shopOverlay").style.display = "flex";
+  }
+
+  // Shared row-builder for anything that's bought once then toggled
+  // equipped/unequipped (accessories and suits both work this way).
+  function buildEquippableRows(wrap, catalog, ownedList, equippedId, buyFn, equipFn) {
+    catalog.forEach(item => {
+      const owned = ownedList.includes(item.id);
+      const equipped = equippedId === item.id;
       const row = document.createElement("div");
       row.className = "shop-row";
       const btnLabel = owned ? (equipped ? "Unequip" : "Equip") : `${item.cost} ♥`;
@@ -379,26 +447,28 @@ const Pet = (() => {
       `;
       row.querySelector("button").addEventListener("click", async () => {
         if (owned) {
-          await Backend.equipAccessory(item.id);
+          await equipFn(item.id);
         } else {
-          const res = await Backend.buyAccessory(item.id);
+          const res = await buyFn(item.id);
           if (!res.success) return;
         }
         openShop();
         draw();
       });
-      accWrap.appendChild(row);
+      wrap.appendChild(row);
     });
-
-    document.getElementById("shopOverlay").style.display = "flex";
   }
 
   // ---------------- mini-game: catch the hearts ----------------
   function openMiniGame() {
     gameScore = 0;
+    document.getElementById("gameTitleLabel").textContent = "Catch the Hearts!";
     document.getElementById("gameScoreLabel").textContent = "Score: 0";
+    document.getElementById("gameTimeLabel").textContent = `${GAME_DURATION_MS / 1000}s`;
     document.getElementById("gameResult").style.display = "none";
-    document.getElementById("gameField").innerHTML = "";
+    const field = document.getElementById("gameField");
+    field.innerHTML = "";
+    field.classList.remove("bubble-field", "memory-field");
     document.getElementById("gameOverlay").style.display = "flex";
 
     const endAt = Date.now() + GAME_DURATION_MS;
@@ -455,14 +525,174 @@ const Pet = (() => {
   function closeMiniGame() {
     clearInterval(gameSpawner);
     clearInterval(gameTimer);
+    gameSpawner = null;
+    gameTimer = null;
+    memoryState = null;
+    document.getElementById("gameField").classList.remove("bubble-field", "memory-field");
     document.getElementById("gameOverlay").style.display = "none";
+  }
+
+  // ---------------- mini-game: bubble pop ----------------
+  function openBubbleGame() {
+    gameScore = 0;
+    document.getElementById("gameTitleLabel").textContent = "Bubble Pop!";
+    document.getElementById("gameScoreLabel").textContent = "Score: 0";
+    document.getElementById("gameTimeLabel").textContent = `${GAME_DURATION_MS / 1000}s`;
+    document.getElementById("gameResult").style.display = "none";
+    const field = document.getElementById("gameField");
+    field.innerHTML = "";
+    field.classList.remove("memory-field");
+    field.classList.add("bubble-field");
+    document.getElementById("gameOverlay").style.display = "flex";
+
+    const endAt = Date.now() + GAME_DURATION_MS;
+    updateGameTimer(endAt);
+    gameSpawner = setInterval(spawnBubble, 480);
+    gameTimer = setInterval(() => {
+      const msLeft = endAt - Date.now();
+      updateGameTimer(endAt);
+      if (msLeft <= 0) endBubbleGame();
+    }, 100);
+  }
+
+  function spawnBubble() {
+    const field = document.getElementById("gameField");
+    if (!field) return;
+    const bubble = document.createElement("div");
+    bubble.className = "rising-bubble";
+    const fieldWidth = field.clientWidth || 300;
+    const size = 22 + Math.random() * 18;
+    bubble.style.width = `${size}px`;
+    bubble.style.height = `${size}px`;
+    bubble.style.left = `${Math.random() * (fieldWidth - size)}px`;
+    bubble.style.animationDuration = `${2000 + Math.random() * 1100}ms`;
+    bubble.addEventListener("click", () => {
+      gameScore++;
+      document.getElementById("gameScoreLabel").textContent = `Score: ${gameScore}`;
+      bubble.classList.add("bubble-popped");
+      setTimeout(() => bubble.remove(), 160);
+    });
+    bubble.addEventListener("animationend", () => bubble.remove());
+    field.appendChild(bubble);
+  }
+
+  async function endBubbleGame() {
+    clearInterval(gameSpawner);
+    clearInterval(gameTimer);
+    gameSpawner = null;
+    gameTimer = null;
+
+    const happinessGain = Math.min(30, gameScore * 3);
+    const heartsBonus = Math.floor(gameScore / 3);
+    await Backend.applyPlayResult(happinessGain, heartsBonus);
+
+    const field = document.getElementById("gameField");
+    field.innerHTML = "";
+    field.classList.remove("bubble-field");
+    document.getElementById("gameResult").style.display = "block";
+    document.getElementById("gameResultText").textContent =
+      `Popped ${gameScore}! +${happinessGain} happiness, +${heartsBonus} ♥`;
+    draw();
+  }
+
+  // ---------------- mini-game: memory match ----------------
+  let memoryState = null;
+  const MEMORY_EMOJIS = ["🍎", "🍌", "🍇", "🍒", "🍉", "🥝"];
+
+  function openMemoryGame() {
+    const deck = shuffle([...MEMORY_EMOJIS, ...MEMORY_EMOJIS]);
+    memoryState = { deck, flipped: [], matched: [], moves: 0, lock: false };
+
+    document.getElementById("gameTitleLabel").textContent = "Memory Match!";
+    document.getElementById("gameScoreLabel").textContent = "Moves: 0";
+    document.getElementById("gameTimeLabel").textContent = "";
+    document.getElementById("gameResult").style.display = "none";
+
+    const field = document.getElementById("gameField");
+    field.innerHTML = "";
+    field.classList.remove("bubble-field");
+    field.classList.add("memory-field");
+
+    deck.forEach((emoji, idx) => {
+      const card = document.createElement("div");
+      card.className = "memory-card";
+      card.dataset.index = idx;
+      card.innerHTML = `<div class="memory-card-inner"><div class="memory-card-back">?</div><div class="memory-card-front">${emoji}</div></div>`;
+      card.addEventListener("click", () => flipMemoryCard(idx));
+      field.appendChild(card);
+    });
+
+    document.getElementById("gameOverlay").style.display = "flex";
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function flipMemoryCard(idx) {
+    if (!memoryState || memoryState.lock) return;
+    if (memoryState.flipped.includes(idx) || memoryState.matched.includes(idx)) return;
+
+    const field = document.getElementById("gameField");
+    const cardEl = field.querySelector(`[data-index="${idx}"]`);
+    cardEl.classList.add("flipped");
+    memoryState.flipped.push(idx);
+
+    if (memoryState.flipped.length === 2) {
+      memoryState.moves++;
+      document.getElementById("gameScoreLabel").textContent = `Moves: ${memoryState.moves}`;
+      const [i1, i2] = memoryState.flipped;
+
+      if (memoryState.deck[i1] === memoryState.deck[i2]) {
+        memoryState.matched.push(i1, i2);
+        memoryState.flipped = [];
+        if (memoryState.matched.length === memoryState.deck.length) {
+          setTimeout(endMemoryGame, 500);
+        }
+      } else {
+        memoryState.lock = true;
+        setTimeout(() => {
+          [i1, i2].forEach(i => {
+            const el = field.querySelector(`[data-index="${i}"]`);
+            if (el) el.classList.remove("flipped");
+          });
+          memoryState.flipped = [];
+          memoryState.lock = false;
+        }, 700);
+      }
+    }
+  }
+
+  async function endMemoryGame() {
+    const moves = memoryState.moves;
+    const happinessGain = Math.max(10, Math.min(30, 30 - (moves - 6) * 2));
+    const heartsBonus = moves <= 8 ? 5 : moves <= 12 ? 3 : 1;
+    await Backend.applyPlayResult(happinessGain, heartsBonus);
+
+    const field = document.getElementById("gameField");
+    field.classList.remove("memory-field");
+    field.innerHTML = "";
+    document.getElementById("gameResult").style.display = "block";
+    document.getElementById("gameResultText").textContent =
+      `Matched in ${moves} moves! +${happinessGain} happiness, +${heartsBonus} ♥`;
+    memoryState = null;
+    draw();
+  }
+
+  // ---------------- mini-game picker ----------------
+  function openGamePicker() {
+    document.getElementById("gamePickerOverlay").style.display = "flex";
   }
 
   // ---------------- wire up static buttons once ----------------
   function bindOnce() {
     document.getElementById("petFeedBtn").addEventListener("click", openFeedList);
     document.getElementById("petCleanBtn").addEventListener("click", openBrushMode);
-    document.getElementById("petPlayBtn").addEventListener("click", openMiniGame);
+    document.getElementById("petPlayBtn").addEventListener("click", openGamePicker);
     document.getElementById("petShopBtn").addEventListener("click", openShop);
 
     document.getElementById("feedCloseBtn").addEventListener("click", () => {
@@ -472,6 +702,22 @@ const Pet = (() => {
       document.getElementById("shopOverlay").style.display = "none";
     });
     document.getElementById("gameCloseBtn").addEventListener("click", closeMiniGame);
+
+    document.getElementById("pickHeartsBtn").addEventListener("click", () => {
+      document.getElementById("gamePickerOverlay").style.display = "none";
+      openMiniGame();
+    });
+    document.getElementById("pickBubblesBtn").addEventListener("click", () => {
+      document.getElementById("gamePickerOverlay").style.display = "none";
+      openBubbleGame();
+    });
+    document.getElementById("pickMemoryBtn").addEventListener("click", () => {
+      document.getElementById("gamePickerOverlay").style.display = "none";
+      openMemoryGame();
+    });
+    document.getElementById("gamePickerCloseBtn").addEventListener("click", () => {
+      document.getElementById("gamePickerOverlay").style.display = "none";
+    });
 
     document.getElementById("petNameEditBtn").addEventListener("click", openCustomize);
     document.getElementById("customizeSaveBtn").addEventListener("click", saveCustomize);

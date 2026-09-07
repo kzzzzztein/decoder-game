@@ -158,17 +158,42 @@
     <h2>Blob's Shop</h2>
     <div class="shop-section-title">Food</div>
     <div class="shop-list" id="shopFood"></div>
+    <div class="shop-section-title">Suits</div>
+    <div class="shop-list" id="shopSuits"></div>
     <div class="shop-section-title">Accessories</div>
     <div class="shop-list" id="shopAccessories"></div>
     <button class="btn btn-ghost" id="shopCloseBtn" style="margin-top:14px;">Close</button>
   </div>
 </div>
 
-<!-- ============ MINI-GAME: CATCH THE HEARTS ============ -->
+<!-- ============ MINI-GAME PICKER ============ -->
+<div class="modal-backdrop" id="gamePickerOverlay" style="display:none;">
+  <div class="note-card">
+    <span class="stamp">PLAY</span>
+    <h2>Pick a game!</h2>
+    <div class="game-picker-list">
+      <button class="game-pick-btn" id="pickHeartsBtn">
+        <span class="game-pick-emoji">♥</span>
+        <span class="game-pick-name">Catch the Hearts</span>
+      </button>
+      <button class="game-pick-btn" id="pickBubblesBtn">
+        <span class="game-pick-emoji">🫧</span>
+        <span class="game-pick-name">Bubble Pop</span>
+      </button>
+      <button class="game-pick-btn" id="pickMemoryBtn">
+        <span class="game-pick-emoji">🧠</span>
+        <span class="game-pick-name">Memory Match</span>
+      </button>
+    </div>
+    <button class="btn btn-ghost" id="gamePickerCloseBtn" style="margin-top:14px;">Close</button>
+  </div>
+</div>
+
+<!-- ============ MINI-GAME PLAY SCREEN ============ -->
 <div class="modal-backdrop" id="gameOverlay" style="display:none;">
   <div class="note-card game-card">
     <span class="stamp">PLAY</span>
-    <h2>Catch the Hearts!</h2>
+    <h2 id="gameTitleLabel">Catch the Hearts!</h2>
     <div class="game-hud">
       <span id="gameScoreLabel">Score: 0</span>
       <span id="gameTimeLabel">20s</span>
