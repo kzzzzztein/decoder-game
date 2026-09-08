@@ -142,16 +142,29 @@ the home screen). It's a real Tamagotchi-style system:
   points per real hour since you last checked in. Neglect it and its
   face changes: happy → neutral → sad → sick, with a little idle
   breathing animation that changes pace with mood.
-- **Touch it** — tapping the blob directly makes it squish and pop off a
-  little burst of sparkles, just for fun (no stat effect — it's purely a
-  "you're here, I noticed" reaction).
-- **Brush it** — tapping Brush puts a sponge under your finger. Drag it
-  across the blob's body and hygiene rises in real time while it wiggles
-  happily; tap Done when you're finished.
+- **Touch it** — where you tap actually matters now, like petting a real
+  animal:
+  - **Ears** — a little ear-flick plus a contented look.
+  - **Head** — closes its eyes happily, like a head pat.
+  - **Cheeks** — happy squint and a bigger blush.
+  - **Belly** — ticklish! Eyes squeeze shut laughing and it wiggles fast.
+  - **Tail/bottom** — jumps in surprise, wide eyes.
+
+  Each reaction swaps in its own expression for about a second before
+  settling back to its normal mood face. Purely for delight — no stat
+  effect.
+- **Brush it** — tapping Brush puts a sponge under your finger. While
+  you're actively dragging it across the blob, its face relaxes into a
+  content, eyes-closed look and it sways gently like it's purring —
+  the moment you lift off or drag away, it snaps back to its normal face.
+  Hygiene rises in real time the whole while; tap Done when finished.
 - **Feed it** — pick a food from your inventory (bought in the shop), then
-  drag it onto the blob's body. It leans in as you get close, then does a
-  little chomp animation and the food disappears when you release on
-  target. Missing the blob just cancels the feed, no food wasted.
+  drag it toward the blob. Its eyes actually track the food as it moves
+  (real pupil movement, not a static stare), and it starts drooling once
+  the food gets close enough. Release on target and it chomps down for
+  real — mouth opens and closes a couple of times — then the food's
+  gone. Missing the blob just cancels the feed, no food wasted, and its
+  eyes return to normal.
 - **Play** — tapping Play now opens a picker between three mini-games:
   - **Catch the Hearts** — 20 seconds, tap falling hearts before they land.
   - **Bubble Pop** — 20 seconds, tap bubbles as they float upward.

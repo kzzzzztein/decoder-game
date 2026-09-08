@@ -28,10 +28,10 @@ const Pet = (() => {
     });
   }
 
-  function draw() {
+  function draw(reactionOverride) {
     const pet = Backend.getPlayerData().pet;
     const mood = Backend.getPetMood();
-    document.getElementById("petStage").innerHTML = buildBlobSVG(mood, pet.equipped, pet.color, pet.equippedSuit);
+    document.getElementById("petStage").innerHTML = buildBlobSVG(mood, pet.equipped, pet.color, pet.equippedSuit, reactionOverride);
     document.getElementById("petName").textContent = pet.name;
     document.getElementById("petHeartsLabel").textContent = `♥ ${Backend.getPlayerData().hearts}`;
     setBar("hunger", pet.hunger);
@@ -54,13 +54,18 @@ const Pet = (() => {
   // Layer order matters: shadow → cape (suit back) → ears → gradient body →
   // suit body-overlay (emblem/jacket/pattern) → shine → blush → face →
   // accessory → suit front (mask/helmet/nightcap).
-  function buildBlobSVG(mood, equippedId, bodyColor, suitId) {
+  // `reactionOverride` swaps the mood face for a special one (touch zone,
+  // being brushed, or eye-tracking-while-feeding) without changing mood.
+  function buildBlobSVG(mood, equippedId, bodyColor, suitId, reactionOverride) {
     const uid = "g" + Math.random().toString(36).slice(2, 8);
     const lightColor = shadeColor(bodyColor, 26);
     const bodyStroke = shadeColor(bodyColor, -30);
-    const face = FACES[mood] || FACES.neutral;
+    const face = reactionOverride ? (REACTION_FACES[reactionOverride] || FACES[mood]) : (FACES[mood] || FACES.neutral);
     const accessory = ACCESSORY_SVG[equippedId] || "";
     const suit = SUIT_SVG[suitId] || { back: "", bodyOverlay: "", front: "" };
+    const cheekBoost = reactionOverride === "cheek";
+    const blushR = cheekBoost ? [16, 11] : [12, 8];
+    const blushOpacity = cheekBoost ? 1 : 0.65;
 
     return `
       <svg viewBox="0 0 200 200" class="pet-blob pet-mood-${mood}">
@@ -72,13 +77,13 @@ const Pet = (() => {
         </defs>
         <ellipse cx="100" cy="180" rx="54" ry="9" fill="rgba(67,41,58,0.14)"/>
         ${suit.back}
-        <ellipse cx="68" cy="53" rx="15" ry="18" fill="${bodyColor}" stroke="${bodyStroke}" stroke-width="3"/>
-        <ellipse cx="132" cy="53" rx="15" ry="18" fill="${bodyColor}" stroke="${bodyStroke}" stroke-width="3"/>
+        <ellipse class="pet-ear pet-ear-left" cx="68" cy="53" rx="15" ry="18" fill="${bodyColor}" stroke="${bodyStroke}" stroke-width="3"/>
+        <ellipse class="pet-ear pet-ear-right" cx="132" cy="53" rx="15" ry="18" fill="${bodyColor}" stroke="${bodyStroke}" stroke-width="3"/>
         <ellipse cx="100" cy="115" rx="72" ry="66" fill="url(#bodyGrad-${uid})" stroke="${bodyStroke}" stroke-width="3"/>
         ${suit.bodyOverlay}
         <ellipse cx="70" cy="76" rx="24" ry="15" fill="#FFFFFF" opacity="0.32"/>
-        <ellipse cx="72" cy="120" rx="12" ry="8" fill="#FFB6D2" opacity="0.65"/>
-        <ellipse cx="128" cy="120" rx="12" ry="8" fill="#FFB6D2" opacity="0.65"/>
+        <ellipse cx="72" cy="120" rx="${blushR[0]}" ry="${blushR[1]}" fill="#FFB6D2" opacity="${blushOpacity}"/>
+        <ellipse cx="128" cy="120" rx="${blushR[0]}" ry="${blushR[1]}" fill="#FFB6D2" opacity="${blushOpacity}"/>
         ${face}
         ${accessory}
         ${suit.front}
@@ -126,6 +131,53 @@ const Pet = (() => {
       <path d="M 84 136 Q 100 128 116 136" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
       <text x="140" y="70" font-size="16" fill="#7BAFC4">z</text>
       <text x="150" y="58" font-size="12" fill="#7BAFC4">z</text>
+    `
+  };
+
+  // Temporary faces shown during a specific interaction (touch zone,
+  // brushing, or feeding), swapped back to the real mood face afterward.
+  const REACTION_FACES = {
+    // head/ears touched — content, eyes closed upward (like a head pat)
+    head: `
+      <path d="M 71 100 Q 78 92 85 100" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M 115 100 Q 122 92 129 100" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M 82 128 Q 100 140 118 128" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
+    `,
+    // cheek touched — happy squint, big warm smile (blush is boosted separately)
+    cheek: `
+      <path d="M 71 100 Q 78 94 85 100" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M 115 100 Q 122 94 129 100" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M 78 126 Q 100 144 122 126" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
+    `,
+    // belly touched — ticklish, eyes squeezed shut laughing, open-mouth grin
+    belly: `
+      <path d="M 72 96 L 84 108 M 84 96 L 72 108" stroke="#43293A" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M 116 96 L 128 108 M 128 96 L 116 108" stroke="#43293A" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="100" cy="134" rx="13" ry="9" fill="#43293A"/>
+    `,
+    // tail/bottom touched — surprised, wide eyes, small "o" mouth
+    tail: `
+      <circle cx="78" cy="102" r="9" fill="#43293A"/>
+      <circle cx="122" cy="102" r="9" fill="#43293A"/>
+      <circle cx="80" cy="99" r="2.5" fill="#fff"/>
+      <circle cx="124" cy="99" r="2.5" fill="#fff"/>
+      <ellipse cx="100" cy="132" rx="6" ry="8" fill="#43293A"/>
+    `,
+    // actively being brushed — relaxed, eyes closed downward, tiny smile
+    brushed: `
+      <path d="M 70 100 Q 78 108 86 100" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M 114 100 Q 122 108 130 100" stroke="#43293A" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M 85 128 Q 100 135 115 128" stroke="#43293A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    `,
+    // feeding gesture in progress — googly eyes that track the food, plus
+    // a mouth and drool droplet that JS updates/animates directly by id.
+    tracking: `
+      <circle cx="78" cy="102" r="9" fill="#FFFFFF" stroke="#43293A" stroke-width="1.5"/>
+      <circle cx="122" cy="102" r="9" fill="#FFFFFF" stroke="#43293A" stroke-width="1.5"/>
+      <circle id="petPupilLeft" cx="78" cy="102" r="4.5" fill="#43293A"/>
+      <circle id="petPupilRight" cx="122" cy="102" r="4.5" fill="#43293A"/>
+      <ellipse id="petMouth" cx="100" cy="128" rx="7" ry="5" fill="#43293A"/>
+      <path id="petDrool" class="pet-drool" d="M 96 133 Q 96 146 100 149 Q 104 146 104 133 Z" fill="#BFE8F5"/>
     `
   };
 
@@ -178,27 +230,80 @@ const Pet = (() => {
     blob.addEventListener("pointerdown", handleBlobTouch);
   }
 
-  function handleBlobTouch(e) {
-    const blob = e.currentTarget;
-    blob.classList.remove("pet-squish");
-    void blob.offsetWidth; // restart animation if tapped again quickly
-    blob.classList.add("pet-squish");
-
-    const stage = document.getElementById("petStage");
-    const rect = stage.getBoundingClientRect();
-    const x = (e.clientX || rect.left + rect.width / 2) - rect.left;
-    const y = (e.clientY || rect.top + rect.height / 2) - rect.top;
-    spawnSparkles(stage, x, y);
+  // Maps a click into the blob's own 200x200 viewBox space, regardless of
+  // how large the SVG is actually rendered on screen.
+  function getBlobLocalPoint(evt, blobEl) {
+    const rect = blobEl.getBoundingClientRect();
+    if (!rect.width || !rect.height) return { x: 100, y: 115 };
+    const scaleX = 200 / rect.width;
+    const scaleY = 200 / rect.height;
+    return {
+      x: (evt.clientX - rect.left) * scaleX,
+      y: (evt.clientY - rect.top) * scaleY
+    };
   }
 
-  function spawnSparkles(container, x, y) {
-    const symbols = ["✦", "♥", "✨"];
-    for (let i = 0; i < 4; i++) {
+  function dist(x1, y1, x2, y2) { return Math.hypot(x1 - x2, y1 - y2); }
+
+  // Which part of the pet did this point land on?
+  function classifyTouchZone(x, y) {
+    if (dist(x, y, 68, 53) < 24 || dist(x, y, 132, 53) < 24) return "ears";
+    if (y < 90) return "head";
+    if (y >= 90 && y < 142 && (x < 78 || x > 122)) return "cheek";
+    if (y >= 150) return "tail";
+    return "belly";
+  }
+
+  const TOUCH_REACTION_FACE = { ears: "head", head: "head", cheek: "cheek", belly: "belly", tail: "tail" };
+  const TOUCH_REACTION_ANIM = {
+    ears: "pet-earwiggle", head: "pet-headpat-anim", cheek: "pet-nuzzle",
+    belly: "pet-tickle-anim", tail: "pet-surprise-anim"
+  };
+
+  let touchReactionTimer = null;
+
+  function handleBlobTouch(e) {
+    const blobEl = e.currentTarget;
+    const pt = getBlobLocalPoint(e, blobEl);
+    const zone = classifyTouchZone(pt.x, pt.y);
+
+    const stage = document.getElementById("petStage");
+    const stageRect = stage.getBoundingClientRect();
+    const clickX = e.clientX - stageRect.left;
+    const clickY = e.clientY - stageRect.top;
+
+    // rebuild with the zone's reaction face — this also rebinds the tap
+    // listener onto the freshly-created <svg>, since draw() calls
+    // bindTouchReaction() itself
+    draw(TOUCH_REACTION_FACE[zone]);
+
+    const freshBlob = document.querySelector("#petStage .pet-blob");
+    if (freshBlob) {
+      freshBlob.classList.add(TOUCH_REACTION_ANIM[zone] || "pet-squish");
+      if (zone === "ears") {
+        const side = pt.x < 100 ? "left" : "right";
+        const ear = freshBlob.querySelector(`.pet-ear-${side}`);
+        if (ear) ear.classList.add("pet-ear-flick");
+      }
+    }
+
+    spawnSparkles(stage, clickX, clickY, zone);
+
+    clearTimeout(touchReactionTimer);
+    touchReactionTimer = setTimeout(() => draw(), 850);
+  }
+
+  function spawnSparkles(container, x, y, zone) {
+    const excited = zone === "belly" || zone === "tail";
+    const symbols = excited ? ["✦", "!", "✨"] : ["✦", "♥", "✨"];
+    const count = excited ? 5 : 4;
+    for (let i = 0; i < count; i++) {
       const s = document.createElement("span");
       s.className = "pet-sparkle";
       s.textContent = symbols[i % symbols.length];
-      const angle = (Math.PI * 2 * i) / 4 + Math.random() * 0.6;
-      const dist = 30 + Math.random() * 20;
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.6;
+      const spread = excited ? 42 : 30;
+      const dist = spread + Math.random() * 20;
       s.style.left = `${x}px`;
       s.style.top = `${y}px`;
       s.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
@@ -283,10 +388,21 @@ const Pet = (() => {
     banner.innerHTML = `<span>Drag over Blob to brush ✨</span><button class="btn btn-primary interaction-done-btn">Done</button>`;
     layer.appendChild(banner);
 
-    const blob = document.querySelector("#petStage .pet-blob");
     let gained = 0;
     let lastX = null, lastY = null;
     let pointerDown = false;
+    let isBrushingNow = false;
+
+    // Swaps to/from the relaxed "being brushed" face only on state changes
+    // (not every pointermove tick) — cheap, and rebinds the tap listener
+    // onto the fresh <svg> each time since draw() calls bindTouchReaction().
+    function setBrushingState(active) {
+      if (active === isBrushingNow) return;
+      isBrushingNow = active;
+      draw(active ? "brushed" : undefined);
+      const freshBlob = document.querySelector("#petStage .pet-blob");
+      if (freshBlob) freshBlob.classList.toggle("pet-being-brushed", active);
+    }
 
     function onMove(e) {
       const rect = layer.getBoundingClientRect();
@@ -295,14 +411,16 @@ const Pet = (() => {
       cursor.style.top = `${y}px`;
       cursor.style.opacity = "1";
 
-      if (pointerDown && isOverBlob(x, y, hit)) {
+      const overBlobNow = pointerDown && isOverBlob(x, y, hit);
+      setBrushingState(overBlobNow);
+
+      if (overBlobNow) {
         if (lastX !== null) {
           const dist = Math.hypot(x - lastX, y - lastY);
           const add = Math.min(dist / 40, 100 - (Backend.getPlayerData().pet.hygiene + gained));
           if (add > 0) {
             gained += add;
             setBar("hygiene", Math.min(100, Backend.getPlayerData().pet.hygiene + gained));
-            if (blob) { blob.classList.remove("pet-enjoying"); void blob.offsetWidth; blob.classList.add("pet-enjoying"); }
           }
         }
         lastX = x; lastY = y;
@@ -311,7 +429,7 @@ const Pet = (() => {
       }
     }
     function onDown(e) { pointerDown = true; onMove(e); }
-    function onUp() { pointerDown = false; lastX = null; lastY = null; }
+    function onUp() { pointerDown = false; lastX = null; lastY = null; setBrushingState(false); }
 
     layer.addEventListener("pointerdown", onDown);
     layer.addEventListener("pointermove", onMove);
@@ -319,6 +437,7 @@ const Pet = (() => {
     layer.addEventListener("pointercancel", onUp);
 
     banner.querySelector(".interaction-done-btn").addEventListener("click", async () => {
+      setBrushingState(false);
       layer.remove();
       if (gained > 0) await Backend.addHygiene(gained);
       draw();
@@ -338,9 +457,32 @@ const Pet = (() => {
     banner.innerHTML = `<span>Drag onto Blob to feed 🍽️</span><button class="btn btn-ghost interaction-cancel-btn">Cancel</button>`;
     layer.appendChild(banner);
 
+    // switch to the eye-tracking face for the whole gesture, so the pupils
+    // and drool can be updated directly by id as the food moves
+    draw("tracking");
     const blob = document.querySelector("#petStage .pet-blob");
     let lastX = 0, lastY = 0;
     let finished = false;
+
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+    function updateEyeTracking(layerX, layerY) {
+      if (!blob) return;
+      const blobRect = blob.getBoundingClientRect();
+      if (!blobRect.width) return;
+      const layerRect = layer.getBoundingClientRect();
+      const absX = layerRect.left + layerX;
+      const absY = layerRect.top + layerY;
+      const localX = ((absX - blobRect.left) / blobRect.width) * 200;
+      const localY = ((absY - blobRect.top) / blobRect.height) * 200;
+
+      [{ id: "petPupilLeft", baseX: 78 }, { id: "petPupilRight", baseX: 122 }].forEach(eye => {
+        const pupil = document.getElementById(eye.id);
+        if (!pupil) return;
+        pupil.setAttribute("cx", eye.baseX + clamp(localX - eye.baseX, -4, 4));
+        pupil.setAttribute("cy", 102 + clamp(localY - 102, -3, 3));
+      });
+    }
 
     function onMove(e) {
       const rect = layer.getBoundingClientRect();
@@ -349,25 +491,39 @@ const Pet = (() => {
       cursor.style.left = `${lastX}px`;
       cursor.style.top = `${lastY}px`;
       cursor.style.opacity = "1";
-      if (blob) blob.classList.toggle("pet-anticipating", isOverBlob(lastX, lastY, hit));
+
+      updateEyeTracking(lastX, lastY);
+
+      const overBlob = isOverBlob(lastX, lastY, hit);
+      if (blob) blob.classList.toggle("pet-anticipating", overBlob);
+      const drool = document.getElementById("petDrool");
+      if (drool) drool.classList.toggle("drool-visible", overBlob);
     }
 
     async function onUp() {
       if (finished) return;
       if (isOverBlob(lastX, lastY, hit)) {
         finished = true;
+        const drool = document.getElementById("petDrool");
         if (blob) {
           blob.classList.remove("pet-anticipating");
           blob.classList.remove("pet-eating");
           void blob.offsetWidth;
           blob.classList.add("pet-eating");
         }
+        if (drool) drool.classList.remove("drool-visible");
+        const mouth = document.getElementById("petMouth");
+        if (mouth) {
+          mouth.classList.remove("pet-mouth-chomp");
+          void mouth.offsetWidth;
+          mouth.classList.add("pet-mouth-chomp");
+        }
         cursor.classList.add("cursor-eaten");
         const res = await Backend.feedPet(foodId);
         setTimeout(() => {
           layer.remove();
           draw();
-        }, 500);
+        }, 650);
         if (!res.success) { /* ran out mid-gesture; UI still refreshes harmlessly */ }
       }
     }
@@ -376,7 +532,10 @@ const Pet = (() => {
     layer.addEventListener("pointerdown", onMove);
     layer.addEventListener("pointerup", onUp);
 
-    banner.querySelector(".interaction-cancel-btn").addEventListener("click", () => layer.remove());
+    banner.querySelector(".interaction-cancel-btn").addEventListener("click", () => {
+      layer.remove();
+      draw(); // revert the tracking face back to the real mood
+    });
   }
   function openFeedList() {
     const pet = Backend.getPlayerData().pet;
